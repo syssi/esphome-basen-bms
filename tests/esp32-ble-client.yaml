@@ -1,0 +1,42 @@
+substitutions:
+  name: basen-bms-ble
+  device_description: "Establish a BLE client connection"
+  mac_address: 70:3e:97:07:c0:3e
+
+esphome:
+  name: ${name}
+  comment: ${device_description}
+  project:
+    name: "syssi.esphome-basen-bms"
+    version: 1.3.0
+
+esp32:
+  board: wemos_d1_mini32
+  framework:
+    type: esp-idf
+    version: latest
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+ota:
+
+logger:
+  level: VERY_VERBOSE
+  logs:
+    esp32_ble_tracker: VERY_VERBOSE
+    basen_bms_ble: VERY_VERBOSE
+    scheduler: DEBUG
+    component: DEBUG
+    sensor: DEBUG
+
+# If you don't use Home Assistant please remove this `api` section and uncomment the `mqtt` component!
+api:
+
+esp32_ble_tracker:
+
+switch:
+  - platform: ble_client
+    ble_client_id: client0
+    name: "${name} enable bluetooth connection"
