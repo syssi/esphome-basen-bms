@@ -380,8 +380,6 @@ void BasenBmsBle::decode_general_info_data_(const std::vector<uint8_t> &data) {
   this->publish_state_(this->manufacturing_date_text_sensor_,
                        to_string(year) + "." + to_string(month) + "." + to_string(day));
 
-  ESP_LOGI(TAG, "  Manufacturing date: %d.%d.%d", ((raw_date >> 9) & 127) + 1980, (raw_date >> 5) & 15, 31 & raw_date);
-
   //  26   2  0x07 0x00            Charging cycles
   this->publish_state_(this->charging_cycles_sensor_, (float) basen_get_32bit(26));
 
