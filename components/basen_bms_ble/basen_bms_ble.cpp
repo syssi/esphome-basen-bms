@@ -432,6 +432,7 @@ void BasenBmsBle::decode_cell_voltages_data_(const std::vector<uint8_t> &data) {
     this->publish_state_(this->cells_[i + offset].cell_voltage_sensor_, cell_voltage);
   }
 
+  // @FIXME: Min/Max voltages over different chunks doesn't work yet
   this->publish_state_(this->min_cell_voltage_sensor_, min_cell_voltage);
   this->publish_state_(this->max_cell_voltage_sensor_, max_cell_voltage);
   this->publish_state_(this->max_voltage_cell_sensor_, (float) max_voltage_cell);
