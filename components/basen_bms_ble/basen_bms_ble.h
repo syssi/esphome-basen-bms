@@ -182,6 +182,7 @@ class BasenBmsBle : public esphome::ble_client::BLEClientNode, public PollingCom
   void decode_status_data_(const std::vector<uint8_t> &data);
   void decode_general_info_data_(const std::vector<uint8_t> &data);
   void decode_cell_voltages_data_(const std::vector<uint8_t> &data);
+  void decode_balancing_data_(const std::vector<uint8_t> &data);
   void decode_protect_ic_data_(const std::vector<uint8_t> &data);
   void publish_state_(binary_sensor::BinarySensor *binary_sensor, const bool &state);
   void publish_state_(sensor::Sensor *sensor, float value);
