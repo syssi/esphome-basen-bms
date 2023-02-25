@@ -370,7 +370,7 @@ void BasenBmsBle::decode_general_info_data_(const std::vector<uint8_t> &data) {
   //  20   1  0x30                 Unused
   //  21   1  0x75                 Unused
   //  22   2  0x00 0x00            Serial number
-  this->publish_state_(this->serial_number_sensor_, (float) basen_get_32bit(22));
+  this->publish_state_(this->serial_number_sensor_, (float) basen_get_16bit(22));
 
   //  24   2  0x71 0x53            Manufacturing date
   if (this->manufacturing_date_text_sensor_ != nullptr) {
@@ -383,7 +383,7 @@ void BasenBmsBle::decode_general_info_data_(const std::vector<uint8_t> &data) {
   }
 
   //  26   2  0x07 0x00            Charging cycles
-  this->publish_state_(this->charging_cycles_sensor_, (float) basen_get_32bit(26));
+  this->publish_state_(this->charging_cycles_sensor_, (float) basen_get_16bit(26));
 
   //  28   1  0x86                 CRC
   //  29   1  0x04                 CRC
