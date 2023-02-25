@@ -204,6 +204,8 @@ text_sensor:
       name: "${name} charging warnings"
     discharging_warnings:
       name: "${name} discharging warnings"
+    manufacturing_date:
+      name: "${name} manufacturing date"
 
 switch:
   - platform: ble_client
