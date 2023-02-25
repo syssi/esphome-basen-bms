@@ -172,6 +172,11 @@ class BasenBmsBle : public esphome::ble_client::BLEClientNode, public PollingCom
   uint8_t next_command_{0};
   bool enable_fake_traffic_;
 
+  float min_cell_voltage_{100.0f};
+  float max_cell_voltage_{-100.0f};
+  uint8_t max_voltage_cell_{0};
+  uint8_t min_voltage_cell_{0};
+
   void assemble_(const uint8_t *data, uint16_t length);
   void on_basen_bms_ble_data_(const std::vector<uint8_t> &data);
   void decode_status_data_(const std::vector<uint8_t> &data);

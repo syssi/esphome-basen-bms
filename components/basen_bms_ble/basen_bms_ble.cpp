@@ -419,29 +419,27 @@ void BasenBmsBle::decode_cell_voltages_data_(const std::vector<uint8_t> &data) {
   //  22   1  0x00 0x00            Cell voltage 10
   //  24   1  0x00 0x00            Cell voltage 11
   //  26   1  0x00 0x00            Cell voltage 12
-  float min_cell_voltage = 100.0f;
-  float max_cell_voltage = -100.0f;
-  uint8_t min_voltage_cell = 0;
-  uint8_t max_voltage_cell = 0;
   for (uint8_t i = 0; i < cells; i++) {
     float cell_voltage = basen_get_16bit((i * 2) + 4) * 0.001f;
-    if (cell_voltage > 0 && cell_voltage < min_cell_voltage) {
-      min_cell_voltage = cell_voltage;
-      min_voltage_cell = i + offset + 1;
+    if (cell_voltage > 0 && cell_voltage < this->min_cell_voltage_) {
+      this->min_cell_voltage_ = cell_voltage;
+      this->min_voltage_cell_ = i + offset + 1;
     }
-    if (cell_voltage > max_cell_voltage) {
-      max_cell_voltage = cell_voltage;
-      max_voltage_cell = i + offset + 1;
+    if (cell_voltage > this->max_cell_voltage_) {
+      this->max_cell_voltage_ = cell_voltage;
+      this->max_voltage_cell_ = i + offset + 1;
     }
     this->publish_state_(this->cells_[i + offset].cell_voltage_sensor_, cell_voltage);
   }
 
-  // @FIXME: Min/Max voltages over different chunks doesn't work yet
-  this->publish_state_(this->min_cell_voltage_sensor_, min_cell_voltage);
-  this->publish_state_(this->max_cell_voltage_sensor_, max_cell_voltage);
-  this->publish_state_(this->max_voltage_cell_sensor_, (float) max_voltage_cell);
-  this->publish_state_(this->min_voltage_cell_sensor_, (float) min_voltage_cell);
-  this->publish_state_(this->delta_cell_voltage_sensor_, max_cell_voltage - min_cell_voltage);
+  // Publish aggregated sensors at the last chunk. Must be improved if 3 chunks are retrieved.
+  if (data[2] == 0x25) {
+    this->publish_state_(this->min_cell_voltage_sensor_, this->min_cell_voltage_);
+    this->publish_state_(this->max_cell_voltage_sensor_, this->max_cell_voltage_);
+    this->publish_state_(this->max_voltage_cell_sensor_, (float) this->max_voltage_cell_);
+    this->publish_state_(this->min_voltage_cell_sensor_, (float) this->min_voltage_cell_);
+    this->publish_state_(this->delta_cell_voltage_sensor_, this->max_cell_voltage_ - this->min_cell_voltage_);
+  }
 
   //  28   1  0x6A                 CRC
   //  29   1  0x05                 CRC
