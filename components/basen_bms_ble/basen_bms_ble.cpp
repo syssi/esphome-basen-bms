@@ -311,14 +311,14 @@ void BasenBmsBle::decode_status_data_(const std::vector<uint8_t> &data) {
   //  20   1  0x80                 Charging states (Bitmask)
   this->publish_state_(this->charging_states_bitmask_sensor_, data[20]);
   this->publish_state_(this->charging_states_text_sensor_, this->charging_states_bits_to_string_(data[20]));
-  this->publish_state_(this->charging_binary_sensor_, data[20] & (1 << 7));
-  this->publish_state_(this->charging_switch_, data[20] & (1 << 7));
+  this->publish_state_(this->charging_binary_sensor_, (bool) (data[20] & (1 << 7)));
+  this->publish_state_(this->charging_switch_, (bool) (data[20] & (1 << 7)));
 
   //  21   1  0x80                 Discharging states (Bitmask)
   this->publish_state_(this->discharging_states_bitmask_sensor_, data[21]);
   this->publish_state_(this->discharging_states_text_sensor_, this->discharging_states_bits_to_string_(data[21]));
-  this->publish_state_(this->discharging_binary_sensor_, data[21] & (1 << 7));
-  this->publish_state_(this->discharging_switch_, data[21] & (1 << 7));
+  this->publish_state_(this->discharging_binary_sensor_, (bool) (data[21] & (1 << 7)));
+  this->publish_state_(this->discharging_switch_, (bool) (data[21] & (1 << 7)));
 
   //  22   1  0x00                 Charging warnings (Bitmask)
   this->publish_state_(this->charging_warnings_bitmask_sensor_, data[22]);
