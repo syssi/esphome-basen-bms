@@ -28,35 +28,139 @@ class BasenBmsBle : public esphome::ble_client::BLEClientNode, public PollingCom
   void set_balancing_binary_sensor(binary_sensor::BinarySensor *balancing_binary_sensor) {
     balancing_binary_sensor_ = balancing_binary_sensor;
   }
+  void set_charging_binary_sensor(binary_sensor::BinarySensor *charging_binary_sensor) {
+    charging_binary_sensor_ = charging_binary_sensor;
+  }
+  void set_discharging_binary_sensor(binary_sensor::BinarySensor *discharging_binary_sensor) {
+    discharging_binary_sensor_ = discharging_binary_sensor;
+  }
 
   void set_total_voltage_sensor(sensor::Sensor *total_voltage_sensor) { total_voltage_sensor_ = total_voltage_sensor; }
+  void set_current_sensor(sensor::Sensor *current_sensor) { current_sensor_ = current_sensor; }
+  void set_power_sensor(sensor::Sensor *power_sensor) { power_sensor_ = power_sensor; }
+  void set_charging_power_sensor(sensor::Sensor *charging_power_sensor) {
+    charging_power_sensor_ = charging_power_sensor;
+  }
+  void set_discharging_power_sensor(sensor::Sensor *discharging_power_sensor) {
+    discharging_power_sensor_ = discharging_power_sensor;
+  }
+  void set_capacity_remaining_sensor(sensor::Sensor *capacity_remaining_sensor) {
+    capacity_remaining_sensor_ = capacity_remaining_sensor;
+  }
+  void set_charging_states_bitmask_sensor(sensor::Sensor *charging_states_bitmask_sensor) {
+    charging_states_bitmask_sensor_ = charging_states_bitmask_sensor;
+  }
+  void set_discharging_states_bitmask_sensor(sensor::Sensor *discharging_states_bitmask_sensor) {
+    discharging_states_bitmask_sensor_ = discharging_states_bitmask_sensor;
+  }
+  void set_charging_warnings_bitmask_sensor(sensor::Sensor *charging_warnings_bitmask_sensor) {
+    charging_warnings_bitmask_sensor_ = charging_warnings_bitmask_sensor;
+  }
+  void set_discharging_warnings_bitmask_sensor(sensor::Sensor *discharging_warnings_bitmask_sensor) {
+    discharging_warnings_bitmask_sensor_ = discharging_warnings_bitmask_sensor;
+  }
+  void set_state_of_charge_sensor(sensor::Sensor *state_of_charge_sensor) {
+    state_of_charge_sensor_ = state_of_charge_sensor;
+  }
+  void set_nominal_capacity_sensor(sensor::Sensor *nominal_capacity_sensor) {
+    nominal_capacity_sensor_ = nominal_capacity_sensor;
+  }
+  void set_nominal_voltage_sensor(sensor::Sensor *nominal_voltage_sensor) {
+    nominal_voltage_sensor_ = nominal_voltage_sensor;
+  }
+  void set_real_capacity_sensor(sensor::Sensor *real_capacity_sensor) { real_capacity_sensor_ = real_capacity_sensor; }
+  void set_serial_number_sensor(sensor::Sensor *serial_number_sensor) { serial_number_sensor_ = serial_number_sensor; }
+  void set_charging_cycles_sensor(sensor::Sensor *charging_cycles_sensor) {
+    charging_cycles_sensor_ = charging_cycles_sensor;
+  }
+
+  void set_min_cell_voltage_sensor(sensor::Sensor *min_cell_voltage_sensor) {
+    min_cell_voltage_sensor_ = min_cell_voltage_sensor;
+  }
+  void set_max_cell_voltage_sensor(sensor::Sensor *max_cell_voltage_sensor) {
+    max_cell_voltage_sensor_ = max_cell_voltage_sensor;
+  }
+  void set_min_voltage_cell_sensor(sensor::Sensor *min_voltage_cell_sensor) {
+    min_voltage_cell_sensor_ = min_voltage_cell_sensor;
+  }
+  void set_max_voltage_cell_sensor(sensor::Sensor *max_voltage_cell_sensor) {
+    max_voltage_cell_sensor_ = max_voltage_cell_sensor;
+  }
+  void set_delta_cell_voltage_sensor(sensor::Sensor *delta_cell_voltage_sensor) {
+    delta_cell_voltage_sensor_ = delta_cell_voltage_sensor;
+  }
+  void set_average_cell_voltage_sensor(sensor::Sensor *average_cell_voltage_sensor) {
+    average_cell_voltage_sensor_ = average_cell_voltage_sensor;
+  }
   void set_cell_voltage_sensor(uint8_t cell, sensor::Sensor *cell_voltage_sensor) {
     this->cells_[cell].cell_voltage_sensor_ = cell_voltage_sensor;
   }
+  void set_temperature_sensor(uint8_t temperature, sensor::Sensor *temperature_sensor) {
+    this->temperatures_[temperature].temperature_sensor_ = temperature_sensor;
+  }
 
   void set_charging_switch(switch_::Switch *charging_switch) { charging_switch_ = charging_switch; }
+  void set_discharging_switch(switch_::Switch *discharging_switch) { discharging_switch_ = discharging_switch; }
 
-  void set_errors_text_sensor(text_sensor::TextSensor *errors_text_sensor) { errors_text_sensor_ = errors_text_sensor; }
+  void set_charging_states_text_sensor(text_sensor::TextSensor *charging_states_text_sensor) {
+    charging_states_text_sensor_ = charging_states_text_sensor;
+  }
+  void set_discharging_states_text_sensor(text_sensor::TextSensor *discharging_states_text_sensor) {
+    discharging_states_text_sensor_ = discharging_states_text_sensor;
+  }
+  void set_charging_warnings_text_sensor(text_sensor::TextSensor *charging_warnings_text_sensor) {
+    charging_warnings_text_sensor_ = charging_warnings_text_sensor;
+  }
+  void set_discharging_warnings_text_sensor(text_sensor::TextSensor *discharging_warnings_text_sensor) {
+    discharging_warnings_text_sensor_ = discharging_warnings_text_sensor;
+  }
 
   void set_enable_fake_traffic(bool enable_fake_traffic) { enable_fake_traffic_ = enable_fake_traffic; }
   void write_register(uint8_t address, uint16_t value);
 
  protected:
   binary_sensor::BinarySensor *balancing_binary_sensor_;
+  binary_sensor::BinarySensor *charging_binary_sensor_;
+  binary_sensor::BinarySensor *discharging_binary_sensor_;
 
   sensor::Sensor *total_voltage_sensor_;
+  sensor::Sensor *current_sensor_;
+  sensor::Sensor *power_sensor_;
+  sensor::Sensor *charging_power_sensor_;
+  sensor::Sensor *discharging_power_sensor_;
+  sensor::Sensor *capacity_remaining_sensor_;
+  sensor::Sensor *charging_states_bitmask_sensor_;
+  sensor::Sensor *discharging_states_bitmask_sensor_;
+  sensor::Sensor *charging_warnings_bitmask_sensor_;
+  sensor::Sensor *discharging_warnings_bitmask_sensor_;
+  sensor::Sensor *state_of_charge_sensor_;
+  sensor::Sensor *nominal_capacity_sensor_;
+  sensor::Sensor *nominal_voltage_sensor_;
+  sensor::Sensor *real_capacity_sensor_;
+  sensor::Sensor *serial_number_sensor_;
+  sensor::Sensor *charging_cycles_sensor_;
+  sensor::Sensor *min_cell_voltage_sensor_;
+  sensor::Sensor *max_cell_voltage_sensor_;
+  sensor::Sensor *min_voltage_cell_sensor_;
+  sensor::Sensor *max_voltage_cell_sensor_;
+  sensor::Sensor *delta_cell_voltage_sensor_;
+  sensor::Sensor *average_cell_voltage_sensor_;
 
   switch_::Switch *charging_switch_;
+  switch_::Switch *discharging_switch_;
 
-  text_sensor::TextSensor *errors_text_sensor_;
+  text_sensor::TextSensor *charging_states_text_sensor_;
+  text_sensor::TextSensor *discharging_states_text_sensor_;
+  text_sensor::TextSensor *charging_warnings_text_sensor_;
+  text_sensor::TextSensor *discharging_warnings_text_sensor_;
 
   struct Cell {
     sensor::Sensor *cell_voltage_sensor_{nullptr};
-  } cells_[32];
+  } cells_[34];
 
   struct Temperature {
     sensor::Sensor *temperature_sensor_{nullptr};
-  } temperatures_[6];
+  } temperatures_[4];
 
   std::vector<uint8_t> frame_buffer_;
   uint16_t char_notify_handle_;

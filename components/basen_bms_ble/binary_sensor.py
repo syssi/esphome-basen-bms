@@ -10,11 +10,17 @@ DEPENDENCIES = ["basen_bms_ble"]
 CODEOWNERS = ["@syssi"]
 
 CONF_BALANCING = "balancing"
+CONF_CHARGING = "charging"
+CONF_DISCHARGING = "discharging"
 
 ICON_BALANCING = "mdi:battery-heart-variant"
+ICON_CHARGING = "mdi:battery-charging"
+ICON_DISCHARGING = "mdi:power-plug"
 
 BINARY_SENSORS = [
     CONF_BALANCING,
+    CONF_CHARGING,
+    CONF_DISCHARGING,
 ]
 
 CONFIG_SCHEMA = cv.Schema(
@@ -24,6 +30,18 @@ CONFIG_SCHEMA = cv.Schema(
             {
                 cv.GenerateID(): cv.declare_id(binary_sensor.BinarySensor),
                 cv.Optional(CONF_ICON, default=ICON_BALANCING): cv.icon,
+            }
+        ),
+        cv.Optional(CONF_CHARGING): binary_sensor.BINARY_SENSOR_SCHEMA.extend(
+            {
+                cv.GenerateID(): cv.declare_id(binary_sensor.BinarySensor),
+                cv.Optional(CONF_ICON, default=ICON_CHARGING): cv.icon,
+            }
+        ),
+        cv.Optional(CONF_DISCHARGING): binary_sensor.BINARY_SENSOR_SCHEMA.extend(
+            {
+                cv.GenerateID(): cv.declare_id(binary_sensor.BinarySensor),
+                cv.Optional(CONF_ICON, default=ICON_DISCHARGING): cv.icon,
             }
         ),
     }

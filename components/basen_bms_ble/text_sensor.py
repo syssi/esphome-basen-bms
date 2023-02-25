@@ -9,21 +9,48 @@ DEPENDENCIES = ["basen_bms_ble"]
 
 CODEOWNERS = ["@syssi"]
 
-CONF_ERRORS = "errors"
+CONF_CHARGING_STATES = "charging_states"
+CONF_DISCHARGING_STATES = "discharging_states"
+CONF_CHARGING_WARNINGS = "charging_warnings"
+CONF_DISCHARGING_WARNINGS = "discharging_warnings"
 
-ICON_ERRORS = "mdi:alert-circle-outline"
+ICON_CHARGING_STATES = "mdi:alert-circle-outline"
+ICON_DISCHARGING_STATES = "mdi:alert-circle-outline"
+ICON_CHARGING_WARNINGS = "mdi:alert-circle-outline"
+ICON_DISCHARGING_WARNINGS = "mdi:alert-circle-outline"
 
 TEXT_SENSORS = [
-    CONF_ERRORS,
+    CONF_CHARGING_STATES,
+    CONF_DISCHARGING_STATES,
+    CONF_CHARGING_WARNINGS,
+    CONF_DISCHARGING_WARNINGS,
 ]
 
 CONFIG_SCHEMA = cv.Schema(
     {
         cv.GenerateID(CONF_BASEN_BMS_BLE_ID): cv.use_id(BasenBmsBle),
-        cv.Optional(CONF_ERRORS): text_sensor.TEXT_SENSOR_SCHEMA.extend(
+        cv.Optional(CONF_CHARGING_STATES): text_sensor.TEXT_SENSOR_SCHEMA.extend(
             {
                 cv.GenerateID(): cv.declare_id(text_sensor.TextSensor),
-                cv.Optional(CONF_ICON, default=ICON_ERRORS): cv.icon,
+                cv.Optional(CONF_ICON, default=ICON_CHARGING_STATES): cv.icon,
+            }
+        ),
+        cv.Optional(CONF_DISCHARGING_STATES): text_sensor.TEXT_SENSOR_SCHEMA.extend(
+            {
+                cv.GenerateID(): cv.declare_id(text_sensor.TextSensor),
+                cv.Optional(CONF_ICON, default=ICON_DISCHARGING_STATES): cv.icon,
+            }
+        ),
+        cv.Optional(CONF_CHARGING_WARNINGS): text_sensor.TEXT_SENSOR_SCHEMA.extend(
+            {
+                cv.GenerateID(): cv.declare_id(text_sensor.TextSensor),
+                cv.Optional(CONF_ICON, default=ICON_CHARGING_WARNINGS): cv.icon,
+            }
+        ),
+        cv.Optional(CONF_DISCHARGING_WARNINGS): text_sensor.TEXT_SENSOR_SCHEMA.extend(
+            {
+                cv.GenerateID(): cv.declare_id(text_sensor.TextSensor),
+                cv.Optional(CONF_ICON, default=ICON_DISCHARGING_WARNINGS): cv.icon,
             }
         ),
     }

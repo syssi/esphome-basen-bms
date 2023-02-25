@@ -458,11 +458,79 @@ void BasenBmsBle::decode_protect_ic_data_(const std::vector<uint8_t> &data) {
   //  26   1  0x0A                 End of frame
 }
 
-void BasenBmsBle::dump_config() {
+void BasenBmsBle::dump_config() {  // NOLINT(google-readability-function-size,readability-function-size)
   ESP_LOGCONFIG(TAG, "BasenBmsBle:");
   ESP_LOGCONFIG(TAG, "  Fake traffic enabled: %s", YESNO(this->enable_fake_traffic_));
 
-  LOG_SENSOR("", "Total voltage", this->total_voltage_sensor_);
+  LOG_BINARY_SENSOR("", "Balancing", this->balancing_binary_sensor_);
+  LOG_BINARY_SENSOR("", "Charging", this->charging_binary_sensor_);
+  LOG_BINARY_SENSOR("", "Discharging", this->discharging_binary_sensor_);
+
+  LOG_SENSOR("", "Total voltage", total_voltage_sensor_);
+  LOG_SENSOR("", "Current", current_sensor_);
+  LOG_SENSOR("", "Power", power_sensor_);
+  LOG_SENSOR("", "Charging power", charging_power_sensor_);
+  LOG_SENSOR("", "Discharging power", discharging_power_sensor_);
+  LOG_SENSOR("", "Capacity remaining", capacity_remaining_sensor_);
+  LOG_SENSOR("", "Charging states bitmask", charging_states_bitmask_sensor_);
+  LOG_SENSOR("", "Discharging states bitmask", discharging_states_bitmask_sensor_);
+  LOG_SENSOR("", "Charging warnings bitmask", charging_warnings_bitmask_sensor_);
+  LOG_SENSOR("", "Discharging warnings bitmask", discharging_warnings_bitmask_sensor_);
+  LOG_SENSOR("", "State of charge", state_of_charge_sensor_);
+  LOG_SENSOR("", "Nominal capacity", nominal_capacity_sensor_);
+  LOG_SENSOR("", "Nominal voltage", nominal_voltage_sensor_);
+  LOG_SENSOR("", "Real capacity", real_capacity_sensor_);
+  LOG_SENSOR("", "Serial number", serial_number_sensor_);
+  LOG_SENSOR("", "Charging cycles", charging_cycles_sensor_);
+  LOG_SENSOR("", "Min cell voltage", min_cell_voltage_sensor_);
+  LOG_SENSOR("", "Max cell voltage", max_cell_voltage_sensor_);
+  LOG_SENSOR("", "Min voltage cell", min_voltage_cell_sensor_);
+  LOG_SENSOR("", "Max voltage cell", max_voltage_cell_sensor_);
+  LOG_SENSOR("", "Delta cell voltage", delta_cell_voltage_sensor_);
+  LOG_SENSOR("", "Average cell voltage", average_cell_voltage_sensor_);
+  LOG_SENSOR("", "Temperature 1", this->temperatures_[0].temperature_sensor_);
+  LOG_SENSOR("", "Temperature 2", this->temperatures_[1].temperature_sensor_);
+  LOG_SENSOR("", "Temperature 3", this->temperatures_[2].temperature_sensor_);
+  LOG_SENSOR("", "Temperature 4", this->temperatures_[3].temperature_sensor_);
+  LOG_SENSOR("", "Cell Voltage 1", this->cells_[0].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 2", this->cells_[1].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 3", this->cells_[2].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 4", this->cells_[3].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 5", this->cells_[4].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 6", this->cells_[5].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 7", this->cells_[6].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 8", this->cells_[7].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 9", this->cells_[8].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 10", this->cells_[9].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 11", this->cells_[10].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 12", this->cells_[11].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 13", this->cells_[12].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 14", this->cells_[13].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 15", this->cells_[14].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 16", this->cells_[15].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 17", this->cells_[16].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 18", this->cells_[17].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 19", this->cells_[18].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 20", this->cells_[19].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 21", this->cells_[20].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 22", this->cells_[21].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 23", this->cells_[22].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 24", this->cells_[23].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 25", this->cells_[24].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 26", this->cells_[25].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 27", this->cells_[26].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 28", this->cells_[27].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 29", this->cells_[28].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 30", this->cells_[29].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 31", this->cells_[30].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 32", this->cells_[31].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 33", this->cells_[32].cell_voltage_sensor_);
+  LOG_SENSOR("", "Cell Voltage 34", this->cells_[33].cell_voltage_sensor_);
+
+  LOG_TEXT_SENSOR("", "Charging states", this->charging_states_text_sensor_);
+  LOG_TEXT_SENSOR("", "Discharging states", this->discharging_states_text_sensor_);
+  LOG_TEXT_SENSOR("", "Charging warnings", this->charging_warnings_text_sensor_);
+  LOG_TEXT_SENSOR("", "Discharging warnings", this->discharging_warnings_text_sensor_);
 }
 
 void BasenBmsBle::publish_state_(binary_sensor::BinarySensor *binary_sensor, const bool &state) {

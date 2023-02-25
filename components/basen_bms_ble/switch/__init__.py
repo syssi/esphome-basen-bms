@@ -10,11 +10,14 @@ DEPENDENCIES = ["basen_bms_ble"]
 CODEOWNERS = ["@syssi"]
 
 CONF_CHARGING = "charging"
+CONF_DISCHARGING = "discharging"
 
 ICON_CHARGING = "mdi:battery-charging-50"
+ICON_DISCHARGING = "mdi:battery-charging-50"
 
 SWITCHES = {
-    CONF_CHARGING: 0xFA,
+    CONF_CHARGING: 0xFF,
+    CONF_DISCHARGING: 0xFF,
 }
 
 BasenSwitch = basen_bms_ble_ns.class_("BasenSwitch", switch.Switch, cg.Component)
@@ -26,6 +29,12 @@ CONFIG_SCHEMA = cv.Schema(
             {
                 cv.GenerateID(): cv.declare_id(BasenSwitch),
                 cv.Optional(CONF_ICON, default=ICON_CHARGING): cv.icon,
+            }
+        ).extend(cv.COMPONENT_SCHEMA),
+        cv.Optional(CONF_DISCHARGING): switch.SWITCH_SCHEMA.extend(
+            {
+                cv.GenerateID(): cv.declare_id(BasenSwitch),
+                cv.Optional(CONF_ICON, default=ICON_DISCHARGING): cv.icon,
             }
         ).extend(cv.COMPONENT_SCHEMA),
     }
