@@ -262,6 +262,9 @@ void BasenBmsBle::on_basen_bms_ble_data_(const std::vector<uint8_t> &data) {
     case BASEN_FRAME_TYPE_CELL_VOLTAGES_25_34:
       this->decode_cell_voltages_data_(data);
       break;
+    case BASEN_FRAME_TYPE_PROTECT_IC:
+      this->decode_protect_ic_data_(data);
+      break;
     case BASEN_FRAME_TYPE_BALANCING:
       this->decode_balancing_data_(data);
       break;
@@ -489,7 +492,7 @@ void BasenBmsBle::decode_protect_ic_data_(const std::vector<uint8_t> &data) {
   // Byte Len Payload              Description                      Unit  Precision
   //  0    1  0x3A                 Start of frame
   //  1    1  0x16                 Address
-  //  2    1  0x26                 Frame type
+  //  2    1  0x27                 Frame type
   //  3    1                       Data length
   //  4    1
   //  5    1
