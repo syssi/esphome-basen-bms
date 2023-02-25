@@ -373,12 +373,14 @@ void BasenBmsBle::decode_general_info_data_(const std::vector<uint8_t> &data) {
   this->publish_state_(this->serial_number_sensor_, (float) basen_get_32bit(22));
 
   //  24   2  0x71 0x53            Manufacturing date
-  uint16_t raw_date = basen_get_16bit(24);
-  uint16_t year = ((raw_date >> 9) & 127) + 1980;
-  uint8_t month = (raw_date >> 5) & 15;
-  uint8_t day = 31 & raw_date;
-  this->publish_state_(this->manufacturing_date_text_sensor_,
-                       to_string(year) + "." + to_string(month) + "." + to_string(day));
+  if (text_sensor != nullptr) {
+    uint16_t raw_date = basen_get_16bit(24);
+    uint16_t year = ((raw_date >> 9) & 127) + 1980;
+    uint8_t month = (raw_date >> 5) & 15;
+    uint8_t day = 31 & raw_date;
+    this->publish_state_(this->manufacturing_date_text_sensor_,
+                         to_string(year) + "." + to_string(month) + "." + to_string(day));
+  }
 
   //  26   2  0x07 0x00            Charging cycles
   this->publish_state_(this->charging_cycles_sensor_, (float) basen_get_32bit(26));
