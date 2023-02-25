@@ -13,17 +13,20 @@ CONF_CHARGING_STATES = "charging_states"
 CONF_DISCHARGING_STATES = "discharging_states"
 CONF_CHARGING_WARNINGS = "charging_warnings"
 CONF_DISCHARGING_WARNINGS = "discharging_warnings"
+CONF_MANUFACTURING_DATE = "manufacturing_date"
 
 ICON_CHARGING_STATES = "mdi:alert-circle-outline"
 ICON_DISCHARGING_STATES = "mdi:alert-circle-outline"
 ICON_CHARGING_WARNINGS = "mdi:alert-circle-outline"
 ICON_DISCHARGING_WARNINGS = "mdi:alert-circle-outline"
+ICON_MANUFACTURING_DATE = "mdi:factory"
 
 TEXT_SENSORS = [
     CONF_CHARGING_STATES,
     CONF_DISCHARGING_STATES,
     CONF_CHARGING_WARNINGS,
     CONF_DISCHARGING_WARNINGS,
+    CONF_MANUFACTURING_DATE,
 ]
 
 CONFIG_SCHEMA = cv.Schema(
@@ -51,6 +54,12 @@ CONFIG_SCHEMA = cv.Schema(
             {
                 cv.GenerateID(): cv.declare_id(text_sensor.TextSensor),
                 cv.Optional(CONF_ICON, default=ICON_DISCHARGING_WARNINGS): cv.icon,
+            }
+        ),
+        cv.Optional(CONF_MANUFACTURING_DATE): text_sensor.TEXT_SENSOR_SCHEMA.extend(
+            {
+                cv.GenerateID(): cv.declare_id(text_sensor.TextSensor),
+                cv.Optional(CONF_ICON, default=ICON_MANUFACTURING_DATE): cv.icon,
             }
         ),
     }

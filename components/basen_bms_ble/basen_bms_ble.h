@@ -114,6 +114,9 @@ class BasenBmsBle : public esphome::ble_client::BLEClientNode, public PollingCom
   void set_discharging_warnings_text_sensor(text_sensor::TextSensor *discharging_warnings_text_sensor) {
     discharging_warnings_text_sensor_ = discharging_warnings_text_sensor;
   }
+  void set_manufacturing_date_text_sensor(text_sensor::TextSensor *manufacturing_date_text_sensor) {
+    manufacturing_date_text_sensor_ = manufacturing_date_text_sensor;
+  }
 
   void set_enable_fake_traffic(bool enable_fake_traffic) { enable_fake_traffic_ = enable_fake_traffic; }
   void write_register(uint8_t address, uint16_t value);
@@ -153,6 +156,7 @@ class BasenBmsBle : public esphome::ble_client::BLEClientNode, public PollingCom
   text_sensor::TextSensor *discharging_states_text_sensor_;
   text_sensor::TextSensor *charging_warnings_text_sensor_;
   text_sensor::TextSensor *discharging_warnings_text_sensor_;
+  text_sensor::TextSensor *manufacturing_date_text_sensor_;
 
   struct Cell {
     sensor::Sensor *cell_voltage_sensor_{nullptr};
