@@ -573,6 +573,13 @@ void BasenBmsBle::publish_state_(text_sensor::TextSensor *text_sensor, const std
   text_sensor->publish_state(state);
 }
 
+void BasenBmsBle::publish_state_(switch_::Switch *obj, const bool &state) {
+  if (obj == nullptr)
+    return;
+
+  obj->publish_state(state);
+}
+
 void BasenBmsBle::write_register(uint8_t address, uint16_t value) {
   // this->send_command_(BASEN_CMD_WRITE, BASEN_CMD_MOS);  // @TODO: Pass value
 }
