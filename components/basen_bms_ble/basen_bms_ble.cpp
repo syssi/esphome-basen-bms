@@ -29,8 +29,8 @@ static const uint8_t BASEN_FRAME_TYPE_SETTINGS = 0xE8;
 static const uint8_t BASEN_FRAME_TYPE_SETTINGS_ALTERNATIVE = 0xEA;
 static const uint8_t BASEN_FRAME_TYPE_BALANCING = 0xFE;
 
-static const uint8_t BASEN_COMMANDS_SIZE = 5;
-static const uint8_t BASEN_COMMANDS[BASEN_COMMANDS_SIZE] = {
+static const uint8_t BASEN_COMMAND_QUEUE_SIZE = 5;
+static const uint8_t BASEN_COMMAND_QUEUE[BASEN_COMMAND_QUEUE_SIZE] = {
     BASEN_FRAME_TYPE_STATUS,
     BASEN_FRAME_TYPE_GENERAL_INFO,
     BASEN_FRAME_TYPE_CELL_VOLTAGES_1_12,
@@ -209,42 +209,20 @@ void BasenBmsBle::assemble_(const uint8_t *data, uint16_t length) {
 }
 
 void BasenBmsBle::update() {
-  if (this->enable_fake_traffic_) {
-    // Current -6909 mAh
-    const uint8_t status_frame[32] = {0x3a, 0x16, 0x2a, 0x18, 0x03, 0xe5, 0xff, 0xff, 0x06, 0x64, 0x00,
-                                      0x00, 0x12, 0x14, 0x19, 0x19, 0x35, 0x3d, 0x00, 0x00, 0x80, 0x80,
-                                      0x00, 0x00, 0x0e, 0x02, 0x00, 0x00, 0x82, 0x05, 0x0d, 0x0a};
-    this->assemble_(status_frame, sizeof(status_frame));
-
-    const uint8_t general_info_frame[32] = {0x3a, 0x16, 0x2b, 0x18, 0xa0, 0x86, 0x01, 0x00, 0x00, 0x64, 0x00,
-                                            0x00, 0x91, 0xa0, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x30, 0x75,
-                                            0x00, 0x00, 0x71, 0x53, 0x07, 0x00, 0x86, 0x04, 0x0d, 0x0a};
-    this->assemble_(general_info_frame, sizeof(general_info_frame));
-
-    const uint8_t cell_voltages_frame[32] = {0x3a, 0x16, 0x24, 0x18, 0x96, 0x0c, 0x97, 0x0c, 0x98, 0x0c, 0x96,
-                                             0x0c, 0x96, 0x0c, 0x98, 0x0c, 0x98, 0x0c, 0x97, 0x0c, 0x00, 0x00,
-                                             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x6a, 0x05, 0x0d, 0x0a};
-    this->assemble_(cell_voltages_frame, sizeof(cell_voltages_frame));
-
-    const uint8_t cell_voltages_frame2[32] = {0x3a, 0x16, 0x25, 0x18, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                              0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                              0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x53, 0x00, 0x0d, 0x0a};
-    this->assemble_(cell_voltages_frame2, sizeof(cell_voltages_frame2));
-
-    const uint8_t protect_ic_frame[27] = {0x3a, 0x16, 0xfe, 0x13, 0x00, 0xf9, 0x0f, 0x2c, 0x80,
-                                          0x80, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                          0x00, 0x02, 0x76, 0x53, 0x61, 0x07, 0x05, 0x0d, 0x0a};
-    this->assemble_(protect_ic_frame, sizeof(protect_ic_frame));
-  }
-
-  if (this->node_state != espbt::ClientState::ESTABLISHED) {
+  if (this->node_state != espbt::ClientState::ESTABLISHED && !this->enable_fake_traffic_) {
     ESP_LOGW(TAG, "[%s] Not connected", this->parent_->address_str().c_str());
     return;
   }
 
   // Loop through all commands if connected
-  // this->next_command_ = 0;
-  this->send_command_(BASEN_PKT_START_A, BASEN_COMMANDS[this->next_command_++ % BASEN_COMMANDS_SIZE]);
+  if (this->next_command_ != BASEN_COMMAND_QUEUE_SIZE) {
+    ESP_LOGW(TAG,
+             "Command queue (%d of %d) was not completely processed. "
+             "Please increase the update_interval if you see this warning frequently",
+             this->next_command_ + 1, BASEN_COMMAND_QUEUE_SIZE);
+  }
+  this->next_command_ = 0;
+  this->send_command_(BASEN_PKT_START_A, BASEN_COMMAND_QUEUE[this->next_command_++ % BASEN_COMMAND_QUEUE_SIZE]);
 }
 
 void BasenBmsBle::on_basen_bms_ble_data_(const std::vector<uint8_t> &data) {
@@ -273,8 +251,10 @@ void BasenBmsBle::on_basen_bms_ble_data_(const std::vector<uint8_t> &data) {
                format_hex_pretty(&data.front(), data.size()).c_str());
   }
 
-  // Loop through all commands if connected
-  // this->send_command_(BASEN_PKT_START_A, BASEN_COMMANDS[this->next_command_++ % BASEN_COMMANDS_SIZE]);
+  // Send next command after each received frame
+  if (this->next_command_ < BASEN_COMMAND_QUEUE_SIZE) {
+    this->send_command_(BASEN_PKT_START_A, BASEN_COMMAND_QUEUE[this->next_command_++ % BASEN_COMMAND_QUEUE_SIZE]);
+  }
 }
 
 void BasenBmsBle::decode_status_data_(const std::vector<uint8_t> &data) {
@@ -643,6 +623,11 @@ bool BasenBmsBle::send_command_(uint8_t start_of_frame, uint8_t function, uint8_
   ESP_LOGV(TAG, "Send command (handle 0x%02X): %s", this->char_command_handle_,
            format_hex_pretty(frame, sizeof(frame)).c_str());
 
+  if (this->enable_fake_traffic_) {
+    this->inject_fake_traffic_(function);
+    return true;
+  }
+
   auto status =
       esp_ble_gattc_write_char(this->parent_->get_gattc_if(), this->parent_->get_conn_id(), this->char_command_handle_,
                                sizeof(frame), frame, ESP_GATT_WRITE_TYPE_NO_RSP, ESP_GATT_AUTH_REQ_NONE);
@@ -650,7 +635,47 @@ bool BasenBmsBle::send_command_(uint8_t start_of_frame, uint8_t function, uint8_
   if (status) {
     ESP_LOGW(TAG, "[%s] esp_ble_gattc_write_char failed, status=%d", this->parent_->address_str().c_str(), status);
   }
+
   return (status == 0);
+}
+
+void BasenBmsBle::inject_fake_traffic_(uint8_t frame_type) {
+  // Current -6909 mAh
+  const uint8_t status_frame[32] = {0x3a, 0x16, 0x2a, 0x18, 0x03, 0xe5, 0xff, 0xff, 0x06, 0x64, 0x00,
+                                    0x00, 0x12, 0x14, 0x19, 0x19, 0x35, 0x3d, 0x00, 0x00, 0x80, 0x80,
+                                    0x00, 0x00, 0x0e, 0x02, 0x00, 0x00, 0x82, 0x05, 0x0d, 0x0a};
+  const uint8_t general_info_frame[32] = {0x3a, 0x16, 0x2b, 0x18, 0xa0, 0x86, 0x01, 0x00, 0x00, 0x64, 0x00,
+                                          0x00, 0x91, 0xa0, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x30, 0x75,
+                                          0x00, 0x00, 0x71, 0x53, 0x07, 0x00, 0x86, 0x04, 0x0d, 0x0a};
+  const uint8_t cell_voltages_frame[32] = {0x3a, 0x16, 0x24, 0x18, 0x96, 0x0c, 0x97, 0x0c, 0x98, 0x0c, 0x96,
+                                           0x0c, 0x96, 0x0c, 0x98, 0x0c, 0x98, 0x0c, 0x97, 0x0c, 0x00, 0x00,
+                                           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x6a, 0x05, 0x0d, 0x0a};
+  const uint8_t cell_voltages_frame2[32] = {0x3a, 0x16, 0x25, 0x18, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x53, 0x00, 0x0d, 0x0a};
+  const uint8_t balancing_frame[27] = {0x3a, 0x16, 0xfe, 0x13, 0x00, 0xf9, 0x0f, 0x2c, 0x80,
+                                       0x80, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                       0x00, 0x02, 0x76, 0x53, 0x61, 0x07, 0x05, 0x0d, 0x0a};
+
+  switch (frame_type) {
+    case BASEN_FRAME_TYPE_STATUS:
+      this->assemble_(status_frame, sizeof(status_frame));
+      break;
+    case BASEN_FRAME_TYPE_GENERAL_INFO:
+      this->assemble_(general_info_frame, sizeof(general_info_frame));
+      break;
+    case BASEN_FRAME_TYPE_CELL_VOLTAGES_1_12:
+      this->assemble_(cell_voltages_frame, sizeof(cell_voltages_frame));
+      break;
+    case BASEN_FRAME_TYPE_CELL_VOLTAGES_13_24:
+      this->assemble_(cell_voltages_frame2, sizeof(cell_voltages_frame2));
+      break;
+    case BASEN_FRAME_TYPE_BALANCING:
+      this->assemble_(balancing_frame, sizeof(balancing_frame));
+      break;
+    default:
+      ESP_LOGW(TAG, "Unhandled request received: 0x%02X", frame_type);
+  }
 }
 
 std::string BasenBmsBle::charging_states_bits_to_string_(const uint8_t mask) {

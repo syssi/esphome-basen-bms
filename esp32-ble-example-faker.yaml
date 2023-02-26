@@ -3,5 +3,5 @@
 basen_bms_ble:
   - ble_client_id: client0
     id: bms0
-    update_interval: 1s
+    update_interval: 10s
     enable_fake_traffic: true
