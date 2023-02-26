@@ -188,6 +188,7 @@ class BasenBmsBle : public esphome::ble_client::BLEClientNode, public PollingCom
   void publish_state_(sensor::Sensor *sensor, float value);
   void publish_state_(text_sensor::TextSensor *text_sensor, const std::string &state);
   void publish_state_(switch_::Switch *obj, const bool &state);
+  void inject_fake_traffic_(uint8_t function);
   bool send_command_(uint8_t start_of_frame, uint8_t function, uint8_t value = 0x00);
   std::string charging_states_bits_to_string_(uint8_t mask);
   std::string discharging_states_bits_to_string_(uint8_t mask);
