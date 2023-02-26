@@ -22,11 +22,12 @@ static const uint8_t BASEN_PKT_END_2 = 0x0A;
 static const uint8_t BASEN_FRAME_TYPE_CELL_VOLTAGES_1_12 = 0x24;
 static const uint8_t BASEN_FRAME_TYPE_CELL_VOLTAGES_13_24 = 0x25;
 static const uint8_t BASEN_FRAME_TYPE_CELL_VOLTAGES_25_34 = 0x26;
+static const uint8_t BASEN_FRAME_TYPE_PROTECT_IC = 0x27;
 static const uint8_t BASEN_FRAME_TYPE_STATUS = 0x2A;
 static const uint8_t BASEN_FRAME_TYPE_GENERAL_INFO = 0x2B;
 static const uint8_t BASEN_FRAME_TYPE_SETTINGS = 0xE8;
 static const uint8_t BASEN_FRAME_TYPE_SETTINGS_ALTERNATIVE = 0xEA;
-static const uint8_t BASEN_FRAME_TYPE_PROTECT_IC = 0xFE;
+static const uint8_t BASEN_FRAME_TYPE_BALANCING = 0xFE;
 
 static const uint8_t BASEN_COMMANDS_SIZE = 5;
 static const uint8_t BASEN_COMMANDS[BASEN_COMMANDS_SIZE] = {
@@ -34,7 +35,7 @@ static const uint8_t BASEN_COMMANDS[BASEN_COMMANDS_SIZE] = {
     BASEN_FRAME_TYPE_GENERAL_INFO,
     BASEN_FRAME_TYPE_CELL_VOLTAGES_1_12,
     BASEN_FRAME_TYPE_CELL_VOLTAGES_13_24,
-    BASEN_FRAME_TYPE_PROTECT_IC,
+    BASEN_FRAME_TYPE_BALANCING,
 };
 
 static const uint8_t CHARGING_STATES_SIZE = 8;
@@ -264,6 +265,9 @@ void BasenBmsBle::on_basen_bms_ble_data_(const std::vector<uint8_t> &data) {
     case BASEN_FRAME_TYPE_PROTECT_IC:
       this->decode_protect_ic_data_(data);
       break;
+    case BASEN_FRAME_TYPE_BALANCING:
+      this->decode_balancing_data_(data);
+      break;
     default:
       ESP_LOGW(TAG, "Unhandled response received (frame_type 0x%02X): %s", frame_type,
                format_hex_pretty(&data.front(), data.size()).c_str());
@@ -447,8 +451,8 @@ void BasenBmsBle::decode_cell_voltages_data_(const std::vector<uint8_t> &data) {
   //  31   1  0x0A                 End of frame
 }
 
-void BasenBmsBle::decode_protect_ic_data_(const std::vector<uint8_t> &data) {
-  ESP_LOGI(TAG, "Protect IC frame (%d+4 bytes):", data.size());
+void BasenBmsBle::decode_balancing_data_(const std::vector<uint8_t> &data) {
+  ESP_LOGI(TAG, "Balancing frame (%d+4 bytes):", data.size());
   ESP_LOGI(TAG, "  %s", format_hex_pretty(&data.front(), data.size()).c_str());
 
   // Byte Len Payload              Description                      Unit  Precision
@@ -465,17 +469,51 @@ void BasenBmsBle::decode_protect_ic_data_(const std::vector<uint8_t> &data) {
   //  10   1  0x00
   //  11   1  0x00
   //  12   1  0x80
-  //  13   1  0x00                 Temperature 3 (if SOF is 0x3B)
+  //  13   1  0x00
   //  14   1  0x00
   //  15   1  0x00
   //  16   1  0x00
-  //  17   1  0x00                 Temperature 4 (if SOF is 0x3B)
+  //  17   1  0x00
   //  18   1  0x00
   //  19   1  0x02
   //  20   1  0x76
   //  21   1  0x53
   //  22   1  0x61
   //  23   1  0x85                 CRC
+  //  24   1  0x04                 CRC
+  //  25   1  0x0D                 End of frame
+  //  26   1  0x0A                 End of frame
+}
+
+void BasenBmsBle::decode_protect_ic_data_(const std::vector<uint8_t> &data) {
+  ESP_LOGI(TAG, "Protect IC frame (%d+4 bytes):", data.size());
+  ESP_LOGI(TAG, "  %s", format_hex_pretty(&data.front(), data.size()).c_str());
+
+  // Byte Len Payload              Description                      Unit  Precision
+  //  0    1  0x3A                 Start of frame
+  //  1    1  0x16                 Address
+  //  2    1  0x27                 Frame type
+  //  3    1                       Data length
+  //  4    1
+  //  5    1
+  //  6    1
+  //  7    1
+  //  8    1
+  //  9    1
+  //  10   1
+  //  11   1
+  //  12   1
+  //  13   1                       Temperature 3 (if SOF is 0x3B)
+  //  14   1
+  //  15   1
+  //  16   1
+  //  17   1                       Temperature 4 (if SOF is 0x3B)
+  //  18   1
+  //  19   1
+  //  20   1
+  //  21   1
+  //  22   1
+  //  23   1                       CRC
   //  24   1  0x04                 CRC
   //  25   1  0x0D                 End of frame
   //  26   1  0x0A                 End of frame

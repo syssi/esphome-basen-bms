@@ -128,7 +128,7 @@ esphome run esp32-example.yaml
 [sensor:127]: 'basen-bms-ble max voltage cell': Sending state 3.00000  with 0 decimals of accuracy
 [sensor:127]: 'basen-bms-ble min voltage cell': Sending state 1.00000  with 0 decimals of accuracy
 [sensor:127]: 'basen-bms-ble delta cell voltage': Sending state 0.00200 V with 3 decimals of accuracy
-[basen_bms_ble:451]: Protect IC frame (23+4 bytes):
+[basen_bms_ble:451]: Balancing frame (23+4 bytes):
 [basen_bms_ble:452]:   3A.16.FE.13.00.F9.0F.2C.80.80.00.00.80.00.00.00.00.00.00.02.76.53.61 (23)
 ```
 
