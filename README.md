@@ -10,6 +10,8 @@ ESPHome component to monitor a Basen Battery Management System (Basen-BMS) via B
 
 The Basen BMS is probably a rebrand of the VIP-BMS, EE-BMS, Mabru-BMS or Roamer BMS.
 
+Credits: Thanks to [@mager33](https://github.com/mager33)) for heavily testing the early beta versions.
+
 ## Supported devices
 
 * BASEN 24V 100Ah Bluetooth (BG-24100, reported by [@mager33](https://github.com/syssi/esphome-basen-bms/issues/5#issuecomment-1445179807))
