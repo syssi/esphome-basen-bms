@@ -215,6 +215,12 @@ void BasenBmsBle::update() {
   }
 
   // Loop through all commands if connected
+  if (this->next_command_ != BASEN_COMMAND_QUEUE_SIZE) {
+    ESP_LOGW(TAG,
+             "Command queue (%d of %d) was not completely processed. "
+             "Please increase the update_interval if you see this warning frequently",
+             this->next_commands_ + 1, BASEN_COMMAND_QUEUE_SIZE);
+  }
   this->next_command_ = 0;
   this->send_command_(BASEN_PKT_START_A, BASEN_COMMAND_QUEUE[this->next_command_++ % BASEN_COMMAND_QUEUE_SIZE]);
 }
