@@ -6,7 +6,7 @@ esphome:
   name: ${name}
   comment: ${device_description}
   project:
-    name: "syssi.esphome-jk-bms"
+    name: "syssi.esphome-basen-bms"
     version: 1.0.0
 
 esp32:
