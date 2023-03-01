@@ -29,7 +29,7 @@ static const uint8_t BASEN_FRAME_TYPE_SETTINGS = 0xE8;
 static const uint8_t BASEN_FRAME_TYPE_SETTINGS_ALTERNATIVE = 0xEA;
 static const uint8_t BASEN_FRAME_TYPE_BALANCING = 0xFE;
 
-static const uint8_t BASEN_COMMAND_QUEUE_SIZE = 5;
+static const uint8_t BASEN_COMMAND_QUEUE_SIZE = 7;
 static const uint8_t BASEN_COMMAND_QUEUE[BASEN_COMMAND_QUEUE_SIZE] = {
     BASEN_FRAME_TYPE_STATUS,
     BASEN_FRAME_TYPE_GENERAL_INFO,
@@ -418,8 +418,8 @@ void BasenBmsBle::decode_cell_voltages_data_(const std::vector<uint8_t> &data) {
     this->publish_state_(this->cells_[i + offset].cell_voltage_sensor_, cell_voltage);
   }
 
-  // Publish aggregated sensors at the last chunk. Must be improved if 3 chunks are retrieved.
-  if (data[2] == 0x25) {
+  // Publish aggregated sensors at the last chunk.
+  if (data[2] == 0x26) {
     this->publish_state_(this->min_cell_voltage_sensor_, this->min_cell_voltage_);
     this->publish_state_(this->max_cell_voltage_sensor_, this->max_cell_voltage_);
     this->publish_state_(this->max_voltage_cell_sensor_, (float) this->max_voltage_cell_);
