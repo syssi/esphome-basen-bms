@@ -274,10 +274,17 @@ void BasenBmsBle::decode_status_data_(const std::vector<uint8_t> &data) {
   //  2    1  0x2A                 Frame type
   //  3    1  0x18                 Data length
   //  4    4  0x00 0x00 0x00 0x00  Current (without calibration)    A     0.001f
-  this->publish_state_(this->current_sensor_, ((int32_t) basen_get_32bit(4)) * 0.001f);
+  float current = ((int32_t) basen_get_32bit(4)) * 0.001f;
+  this->publish_state_(this->current_sensor_, current);
 
   //  8    4  0xCE 0x61 0x00 0x00  Total voltage                    V     0.001f
-  this->publish_state_(this->total_voltage_sensor_, basen_get_32bit(8) * 0.001f);
+  float total_voltage = basen_get_32bit(8) * 0.001f;
+  this->publish_state_(this->total_voltage_sensor_, total_voltage);
+
+  float power = total_voltage * current;
+  this->publish_state_(this->power_sensor_, power);
+  this->publish_state_(this->charging_power_sensor_, std::max(0.0f, power));               // 500W vs 0W -> 500W
+  this->publish_state_(this->discharging_power_sensor_, std::abs(std::min(0.0f, power)));  // -500W vs 0W -> 500W
 
   //  12   1  0x12                 Temperature 1                    °C    1.0f
   //  13   1  0x14                 Temperature 2                    °C    1.0f
