@@ -25,6 +25,9 @@ static const uint8_t BASEN_ADDRESS = 0x16;
 static const uint8_t BASEN_PKT_END_1 = 0x0D;
 static const uint8_t BASEN_PKT_END_2 = 0x0A;
 
+static const uint8_t BASEN_FRAME_TYPE_WRITE = 0xEB;
+static const uint16_t BASEN_MOSFET_REGISTER = 0x011D;
+
 static const uint8_t BASEN_FRAME_TYPE_CELL_VOLTAGES_1_12 = 0x24;
 static const uint8_t BASEN_FRAME_TYPE_CELL_VOLTAGES_13_24 = 0x25;
 static const uint8_t BASEN_FRAME_TYPE_CELL_VOLTAGES_25_34 = 0x26;
@@ -323,14 +326,18 @@ void BasenBmsBle::decode_status_data_(const std::vector<uint8_t> &data) {
   //  20   1  0x80                 Charging states (Bitmask)
   this->publish_state_(this->charging_states_bitmask_sensor_, data[20]);
   this->publish_state_(this->charging_states_text_sensor_, this->charging_states_bits_to_string_(data[20]));
-  this->publish_state_(this->charging_binary_sensor_, (bool) (data[20] & (1 << 7)));
-  this->publish_state_(this->charging_switch_, (bool) (data[20] & (1 << 7)));
+  bool charging_mosfet = (bool) (data[20] & (1 << 7));
+  this->publish_state_(this->charging_binary_sensor_, charging_mosfet);
+  this->publish_state_(this->charging_switch_, charging_mosfet);
 
   //  21   1  0x80                 Discharging states (Bitmask)
   this->publish_state_(this->discharging_states_bitmask_sensor_, data[21]);
   this->publish_state_(this->discharging_states_text_sensor_, this->discharging_states_bits_to_string_(data[21]));
-  this->publish_state_(this->discharging_binary_sensor_, (bool) (data[21] & (1 << 7)));
-  this->publish_state_(this->discharging_switch_, (bool) (data[21] & (1 << 7)));
+  bool discharging_mosfet = (bool) (data[21] & (1 << 7));
+  this->publish_state_(this->discharging_binary_sensor_, discharging_mosfet);
+  this->publish_state_(this->discharging_switch_, discharging_mosfet);
+
+  this->mosfet_status_ = (charging_mosfet ? 0x01 : 0x00) | (discharging_mosfet ? 0x02 : 0x00);
 
   //  22   1  0x00                 Charging warnings (Bitmask)
   this->publish_state_(this->charging_warnings_bitmask_sensor_, data[22]);
@@ -675,32 +682,67 @@ void BasenBmsBle::publish_state_(switch_::Switch *obj, const bool &state) {
   obj->publish_state(state);
 }
 
-void BasenBmsBle::write_register(uint8_t address, uint16_t value) {
-  // this->send_command_(BASEN_CMD_WRITE, BASEN_CMD_MOS);  // @TODO: Pass value
-}
-
-#ifdef USE_ESP32
-bool BasenBmsBle::send_command_(uint8_t start_of_frame, uint8_t function, uint8_t value) {
-  uint8_t frame[9];
-  uint8_t data_len = 1;
-
+std::vector<uint8_t> BasenBmsBle::build_frame_(uint8_t start_of_frame, uint8_t function, const uint8_t *data,
+                                               uint8_t data_len) const {
+  std::vector<uint8_t> frame(data_len + 8);
   frame[0] = start_of_frame;
   frame[1] = BASEN_ADDRESS;
   frame[2] = function;
   frame[3] = data_len;
-  frame[4] = value;
-  auto crc = chksum_(frame + 1, 4);
-  frame[5] = crc >> 0;
-  frame[6] = crc >> 8;
-  frame[7] = BASEN_PKT_END_1;
-  frame[8] = BASEN_PKT_END_2;
+  for (uint8_t i = 0; i < data_len; i++)
+    frame[4 + i] = data[i];
+  auto crc = chksum_(frame.data() + 1, data_len + 3);
+  frame[4 + data_len] = crc >> 0;
+  frame[5 + data_len] = crc >> 8;
+  frame[6 + data_len] = BASEN_PKT_END_1;
+  frame[7 + data_len] = BASEN_PKT_END_2;
+  return frame;
+}
 
-  ESP_LOGV(TAG, "Send command (handle 0x%02X): %s", this->char_command_handle_,
-           format_hex_pretty(frame, sizeof(frame)).c_str());  // NOLINT
+bool BasenBmsBle::write_register(uint16_t reg, uint8_t value) {
+  const uint8_t data[4] = {0x86, (uint8_t) (reg & 0xFF), (uint8_t) (reg >> 8), value};
+  auto frame = build_frame_(BASEN_PKT_START_B, BASEN_FRAME_TYPE_WRITE, data, 4);
+
+#ifdef USE_ESP32
+  ESP_LOGV(TAG, "Send write command (handle 0x%02X): %s", this->char_command_handle_,
+           format_hex_pretty(frame.data(), frame.size()).c_str());  // NOLINT
 
   auto status =
       esp_ble_gattc_write_char(this->parent_->get_gattc_if(), this->parent_->get_conn_id(), this->char_command_handle_,
-                               sizeof(frame), frame, ESP_GATT_WRITE_TYPE_NO_RSP, ESP_GATT_AUTH_REQ_NONE);
+                               frame.size(), frame.data(), ESP_GATT_WRITE_TYPE_NO_RSP, ESP_GATT_AUTH_REQ_NONE);
+
+  if (status) {
+    ESP_LOGW(TAG, "[%s] esp_ble_gattc_write_char failed, status=%d", ADDR_STR(this->parent_->address_str()), status);
+    return false;
+  }
+#endif  // USE_ESP32
+
+  return true;
+}
+
+bool BasenBmsBle::change_mosfet_status(uint16_t reg, uint8_t bit, bool state) {
+  if (this->mosfet_status_ == 0xFF) {
+    ESP_LOGE(TAG, "Unable to change mosfet status because it's unknown");
+    return false;
+  }
+  uint8_t new_status = state ? (this->mosfet_status_ | (1 << bit)) : (this->mosfet_status_ & ~(1 << bit));
+  if (!this->write_register(reg, new_status))
+    return false;
+  this->mosfet_status_ = new_status;
+  return true;
+}
+
+#ifdef USE_ESP32
+bool BasenBmsBle::send_command_(uint8_t start_of_frame, uint8_t function, uint8_t value) {
+  const uint8_t data[1] = {value};
+  auto frame = build_frame_(start_of_frame, function, data, 1);
+
+  ESP_LOGV(TAG, "Send command (handle 0x%02X): %s", this->char_command_handle_,
+           format_hex_pretty(frame.data(), frame.size()).c_str());  // NOLINT
+
+  auto status =
+      esp_ble_gattc_write_char(this->parent_->get_gattc_if(), this->parent_->get_conn_id(), this->char_command_handle_,
+                               frame.size(), frame.data(), ESP_GATT_WRITE_TYPE_NO_RSP, ESP_GATT_AUTH_REQ_NONE);
 
   if (status) {
     ESP_LOGW(TAG, "[%s] esp_ble_gattc_write_char failed, status=%d", ADDR_STR(this->parent_->address_str()), status);

@@ -8,7 +8,7 @@ static const char *const TAG = "basen_bms_ble.switch";
 
 void BasenSwitch::dump_config() { LOG_SWITCH("", "BasenBmsBle Switch", this); }
 void BasenSwitch::write_state(bool state) {
-  // this->parent_->write_register(this->holding_register_, (uint16_t) state);
+  this->parent_->change_mosfet_status(this->holding_register_, this->bit_, state);
 }
 
 }  // namespace esphome::basen_bms_ble
