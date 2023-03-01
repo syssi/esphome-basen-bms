@@ -307,8 +307,8 @@ void BasenBmsBle::decode_status_data_(const std::vector<uint8_t> &data) {
   this->publish_state_(this->charging_warnings_text_sensor_, this->charging_states_bits_to_string_(data[22]));
 
   //  23   1  0x00                 Discharging warnings (Bitmask)
-  this->publish_state_(this->charging_warnings_bitmask_sensor_, data[23]);
-  this->publish_state_(this->charging_warnings_text_sensor_, this->charging_states_bits_to_string_(data[23]));
+  this->publish_state_(this->discharging_warnings_bitmask_sensor_, data[23]);
+  this->publish_state_(this->discharging_warnings_text_sensor_, this->charging_states_bits_to_string_(data[23]));
 
   //  24   1  0x08                 State of charge                  %     1.0f
   this->publish_state_(this->state_of_charge_sensor_, (float) data[24]);
