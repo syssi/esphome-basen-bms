@@ -150,15 +150,20 @@ If this component doesn't work out of the box for your device please update your
 logger:
   level: VERY_VERBOSE
   logs:
-    basen_bms_ble: VERY_VERBOSE
-    ble_client: DEBUG
     esp32_ble: DEBUG
-    esp32_ble_tracker: DEBUG
+    esp32_ble_tracker: VERY_VERBOSE
+    basen_bms_ble: VERY_VERBOSE
     scheduler: DEBUG
     component: DEBUG
     sensor: DEBUG
-    api: DEBUG
-    api.service: DEBUG
+    mqtt: INFO
+    mqtt.idf: INFO
+    mqtt.component: INFO
+    mqtt.sensor: INFO
+    mqtt.switch: INFO
+    api.service: INFO
+    api: INFO
+    api: INFO
 ```
 
 ## References
