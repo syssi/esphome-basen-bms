@@ -15,6 +15,7 @@ Credits: Thanks to [@mager33](https://github.com/mager33) for heavily testing th
 ## Supported devices
 
 * BASEN 24V 100Ah Bluetooth (BG-24100, reported by [@mager33](https://github.com/syssi/esphome-basen-bms/issues/5#issuecomment-1445179807))
+* ROAMER 200SMART2 12V 200AH (200SMART2, reported by [@DrRob](https://github.com/syssi/esphome-basen-bms/issues/26))
 
 ## Untested devices
 
