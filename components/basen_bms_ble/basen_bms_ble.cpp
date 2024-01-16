@@ -291,7 +291,7 @@ void BasenBmsBle::decode_status_data_(const std::vector<uint8_t> &data) {
   //  14   1  0x19                 Temperature 3                    °C    1.0f
   //  15   1  0x19                 Temperature 4                    °C    1.0f
   for (uint8_t i = 0; i < 4; i++) {
-    this->publish_state_(this->temperatures_[i].temperature_sensor_, (float) data[12 + i]);
+    this->publish_state_(this->temperatures_[i].temperature_sensor_, (float) (int8_t) data[12 + i]);
   }
 
   //  16   4  0x63 0x23 0x00 0x00  Capacity remaining               Ah    0.001f
