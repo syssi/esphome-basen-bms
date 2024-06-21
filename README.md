@@ -24,7 +24,7 @@ Credits: Thanks to [@mager33](https://github.com/mager33) for heavily testing th
 
 ## Requirements
 
-* [ESPHome 2022.11.0 or higher](https://github.com/esphome/esphome/releases).
+* [ESPHome 2024.6.0 or higher](https://github.com/esphome/esphome/releases).
 * Generic ESP32 board
 
 ## Installation
