@@ -30,7 +30,19 @@ logger:
 api:
   reboot_timeout: 0s
 
+# The BLE name can probably not be used to identify the device easily
+#
+# [VV][esp32_ble_tracker:361]: Parse Result:
+# [VV][esp32_ble_tracker:378]: Address: A4:C1:38:27:48:9A (PUBLIC)
+# [VV][esp32_ble_tracker:380]: RSSI: -84
+# [VV][esp32_ble_tracker:381]: Name: '17427'
+# [VV][esp32_ble_tracker:389]: Ad Flag: 6
+# [VV][esp32_ble_tracker:392]: Service UUID: 0xFA00
+# [VV][esp32_ble_tracker:395]: Manufacturer data: 03.04.05.06
+# [VV][esp32_ble_tracker:411]: Adv data: 02.01.06.03.02.00.FA.06.09.31.37.34.32.37.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.07.FF.01.02.03.04.05.06.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00 (62)
 esp32_ble_tracker:
+  scan_parameters:
+    active: true
 
 text_sensor:
   - platform: ble_scanner
