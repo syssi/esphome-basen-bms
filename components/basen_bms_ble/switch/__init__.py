@@ -1,7 +1,7 @@
 import esphome.codegen as cg
 from esphome.components import switch
 import esphome.config_validation as cv
-from esphome.const import CONF_ICON, CONF_ID
+from esphome.const import CONF_ID
 
 from .. import CONF_BASEN_BMS_BLE_ID, BasenBmsBle, basen_bms_ble_ns
 
@@ -26,12 +26,10 @@ CONFIG_SCHEMA = cv.Schema(
     {
         cv.GenerateID(CONF_BASEN_BMS_BLE_ID): cv.use_id(BasenBmsBle),
         cv.Optional(CONF_CHARGING): switch.switch_schema(
-            BasenSwitch,
-            icon=ICON_CHARGING
+            BasenSwitch, icon=ICON_CHARGING
         ).extend(cv.COMPONENT_SCHEMA),
         cv.Optional(CONF_DISCHARGING): switch.switch_schema(
-            BasenSwitch,
-            icon=ICON_DISCHARGING
+            BasenSwitch, icon=ICON_DISCHARGING
         ).extend(cv.COMPONENT_SCHEMA),
     }
 )
