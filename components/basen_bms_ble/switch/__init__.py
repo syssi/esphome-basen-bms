@@ -25,17 +25,13 @@ BasenSwitch = basen_bms_ble_ns.class_("BasenSwitch", switch.Switch, cg.Component
 CONFIG_SCHEMA = cv.Schema(
     {
         cv.GenerateID(CONF_BASEN_BMS_BLE_ID): cv.use_id(BasenBmsBle),
-        cv.Optional(CONF_CHARGING): switch.SWITCH_SCHEMA.extend(
-            {
-                cv.GenerateID(): cv.declare_id(BasenSwitch),
-                cv.Optional(CONF_ICON, default=ICON_CHARGING): cv.icon,
-            }
+        cv.Optional(CONF_CHARGING): switch.switch_schema(
+            BasenSwitch,
+            icon=ICON_CHARGING
         ).extend(cv.COMPONENT_SCHEMA),
-        cv.Optional(CONF_DISCHARGING): switch.SWITCH_SCHEMA.extend(
-            {
-                cv.GenerateID(): cv.declare_id(BasenSwitch),
-                cv.Optional(CONF_ICON, default=ICON_DISCHARGING): cv.icon,
-            }
+        cv.Optional(CONF_DISCHARGING): switch.switch_schema(
+            BasenSwitch,
+            icon=ICON_DISCHARGING
         ).extend(cv.COMPONENT_SCHEMA),
     }
 )

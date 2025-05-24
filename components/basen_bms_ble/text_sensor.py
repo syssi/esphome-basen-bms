@@ -32,35 +32,20 @@ TEXT_SENSORS = [
 CONFIG_SCHEMA = cv.Schema(
     {
         cv.GenerateID(CONF_BASEN_BMS_BLE_ID): cv.use_id(BasenBmsBle),
-        cv.Optional(CONF_CHARGING_STATES): text_sensor.TEXT_SENSOR_SCHEMA.extend(
-            {
-                cv.GenerateID(): cv.declare_id(text_sensor.TextSensor),
-                cv.Optional(CONF_ICON, default=ICON_CHARGING_STATES): cv.icon,
-            }
+        cv.Optional(CONF_CHARGING_STATES): text_sensor.text_sensor_schema(
+            icon=ICON_CHARGING_STATES
         ),
-        cv.Optional(CONF_DISCHARGING_STATES): text_sensor.TEXT_SENSOR_SCHEMA.extend(
-            {
-                cv.GenerateID(): cv.declare_id(text_sensor.TextSensor),
-                cv.Optional(CONF_ICON, default=ICON_DISCHARGING_STATES): cv.icon,
-            }
+        cv.Optional(CONF_DISCHARGING_STATES): text_sensor.text_sensor_schema(
+            icon=ICON_DISCHARGING_STATES
         ),
-        cv.Optional(CONF_CHARGING_WARNINGS): text_sensor.TEXT_SENSOR_SCHEMA.extend(
-            {
-                cv.GenerateID(): cv.declare_id(text_sensor.TextSensor),
-                cv.Optional(CONF_ICON, default=ICON_CHARGING_WARNINGS): cv.icon,
-            }
+        cv.Optional(CONF_CHARGING_WARNINGS): text_sensor.text_sensor_schema(
+            icon=ICON_CHARGING_WARNINGS
         ),
-        cv.Optional(CONF_DISCHARGING_WARNINGS): text_sensor.TEXT_SENSOR_SCHEMA.extend(
-            {
-                cv.GenerateID(): cv.declare_id(text_sensor.TextSensor),
-                cv.Optional(CONF_ICON, default=ICON_DISCHARGING_WARNINGS): cv.icon,
-            }
+        cv.Optional(CONF_DISCHARGING_WARNINGS): text_sensor.text_sensor_schema(
+            icon=ICON_DISCHARGING_WARNINGS
         ),
-        cv.Optional(CONF_MANUFACTURING_DATE): text_sensor.TEXT_SENSOR_SCHEMA.extend(
-            {
-                cv.GenerateID(): cv.declare_id(text_sensor.TextSensor),
-                cv.Optional(CONF_ICON, default=ICON_MANUFACTURING_DATE): cv.icon,
-            }
+        cv.Optional(CONF_MANUFACTURING_DATE): text_sensor.text_sensor_schema(
+            icon=ICON_MANUFACTURING_DATE
         ),
     }
 )
