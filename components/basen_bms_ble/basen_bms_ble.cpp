@@ -29,13 +29,15 @@ static const uint8_t BASEN_FRAME_TYPE_SETTINGS = 0xE8;
 static const uint8_t BASEN_FRAME_TYPE_SETTINGS_ALTERNATIVE = 0xEA;
 static const uint8_t BASEN_FRAME_TYPE_BALANCING = 0xFE;
 
-static const uint8_t BASEN_COMMAND_QUEUE_SIZE = 5;
+static const uint8_t BASEN_COMMAND_QUEUE_SIZE = 7;
 static const uint8_t BASEN_COMMAND_QUEUE[BASEN_COMMAND_QUEUE_SIZE] = {
     BASEN_FRAME_TYPE_STATUS,
     BASEN_FRAME_TYPE_GENERAL_INFO,
     BASEN_FRAME_TYPE_CELL_VOLTAGES_1_12,
     BASEN_FRAME_TYPE_CELL_VOLTAGES_13_24,
+    BASEN_FRAME_TYPE_CELL_VOLTAGES_25_34,
     BASEN_FRAME_TYPE_BALANCING,
+    BASEN_FRAME_TYPE_PROTECT_IC,
 };
 
 static const uint8_t CHARGING_STATES_SIZE = 8;
@@ -436,8 +438,8 @@ void BasenBmsBle::decode_cell_voltages_data_(const std::vector<uint8_t> &data) {
     this->publish_state_(this->cells_[i + offset].cell_voltage_sensor_, cell_voltage);
   }
 
-  // Publish aggregated sensors at the last chunk. Must be improved if 3 chunks are retrieved.
-  if (data[2] == 0x25) {
+  // Publish aggregated sensors at the last chunk.
+  if (data[2] == 0x26) {
     this->publish_state_(this->min_cell_voltage_sensor_, this->min_cell_voltage_);
     this->publish_state_(this->max_cell_voltage_sensor_, this->max_cell_voltage_);
     this->publish_state_(this->max_voltage_cell_sensor_, (float) this->max_voltage_cell_);
@@ -673,6 +675,11 @@ void BasenBmsBle::inject_fake_traffic_(uint8_t frame_type) {
   const uint8_t cell_voltages_frame2[32] = {0x3a, 0x16, 0x25, 0x18, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x53, 0x00, 0x0d, 0x0a};
+  const uint8_t cell_voltages_frame3[28] = {0x3b, 0x16, 0x26, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                            0x00, 0x00, 0x00, 0x00, 0x50, 0x00, 0x0d, 0x0a};
+  const uint8_t protect_ic_frame[24] = {0x3b, 0x16, 0x27, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                        0x16, 0x17, 0x19, 0x19, 0x19, 0x19, 0x00, 0x00, 0xde, 0x00, 0x0d, 0x0a};
   const uint8_t balancing_frame[27] = {0x3a, 0x16, 0xfe, 0x13, 0x00, 0xf9, 0x0f, 0x2c, 0x80,
                                        0x80, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00,
                                        0x00, 0x02, 0x76, 0x53, 0x61, 0x07, 0x05, 0x0d, 0x0a};
@@ -689,6 +696,12 @@ void BasenBmsBle::inject_fake_traffic_(uint8_t frame_type) {
       break;
     case BASEN_FRAME_TYPE_CELL_VOLTAGES_13_24:
       this->assemble_(cell_voltages_frame2, sizeof(cell_voltages_frame2));
+      break;
+    case BASEN_FRAME_TYPE_CELL_VOLTAGES_25_34:
+      this->assemble_(cell_voltages_frame3, sizeof(cell_voltages_frame3));
+      break;
+    case BASEN_FRAME_TYPE_PROTECT_IC:
+      this->assemble_(protect_ic_frame, sizeof(protect_ic_frame));
       break;
     case BASEN_FRAME_TYPE_BALANCING:
       this->assemble_(balancing_frame, sizeof(balancing_frame));
