@@ -3,7 +3,7 @@ from esphome.components import binary_sensor
 import esphome.config_validation as cv
 from esphome.const import CONF_ID
 
-from . import CONF_BASEN_BMS_BLE_ID, BasenBmsBle
+from . import BASEN_BMS_BLE_COMPONENT_SCHEMA, CONF_BASEN_BMS_BLE_ID
 
 DEPENDENCIES = ["basen_bms_ble"]
 
@@ -19,9 +19,8 @@ BINARY_SENSORS = [
     CONF_DISCHARGING,
 ]
 
-CONFIG_SCHEMA = cv.Schema(
+CONFIG_SCHEMA = BASEN_BMS_BLE_COMPONENT_SCHEMA.extend(
     {
-        cv.GenerateID(CONF_BASEN_BMS_BLE_ID): cv.use_id(BasenBmsBle),
         cv.Optional(CONF_BALANCING): binary_sensor.binary_sensor_schema(
             icon="mdi:battery-heart-variant"
         ),

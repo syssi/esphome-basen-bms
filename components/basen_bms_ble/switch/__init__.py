@@ -3,7 +3,7 @@ from esphome.components import switch
 import esphome.config_validation as cv
 from esphome.const import CONF_ID
 
-from .. import CONF_BASEN_BMS_BLE_ID, BasenBmsBle, basen_bms_ble_ns
+from .. import BASEN_BMS_BLE_COMPONENT_SCHEMA, CONF_BASEN_BMS_BLE_ID, basen_bms_ble_ns
 
 DEPENDENCIES = ["basen_bms_ble"]
 
@@ -22,9 +22,8 @@ SWITCHES = {
 
 BasenSwitch = basen_bms_ble_ns.class_("BasenSwitch", switch.Switch, cg.Component)
 
-CONFIG_SCHEMA = cv.Schema(
+CONFIG_SCHEMA = BASEN_BMS_BLE_COMPONENT_SCHEMA.extend(
     {
-        cv.GenerateID(CONF_BASEN_BMS_BLE_ID): cv.use_id(BasenBmsBle),
         cv.Optional(CONF_CHARGING): switch.switch_schema(
             BasenSwitch, icon=ICON_CHARGING
         ).extend(cv.COMPONENT_SCHEMA),

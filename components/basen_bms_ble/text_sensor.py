@@ -3,7 +3,7 @@ from esphome.components import text_sensor
 import esphome.config_validation as cv
 from esphome.const import CONF_ID
 
-from . import CONF_BASEN_BMS_BLE_ID, BasenBmsBle
+from . import BASEN_BMS_BLE_COMPONENT_SCHEMA, CONF_BASEN_BMS_BLE_ID
 
 DEPENDENCIES = ["basen_bms_ble"]
 
@@ -29,9 +29,8 @@ TEXT_SENSORS = [
     CONF_MANUFACTURING_DATE,
 ]
 
-CONFIG_SCHEMA = cv.Schema(
+CONFIG_SCHEMA = BASEN_BMS_BLE_COMPONENT_SCHEMA.extend(
     {
-        cv.GenerateID(CONF_BASEN_BMS_BLE_ID): cv.use_id(BasenBmsBle),
         cv.Optional(CONF_CHARGING_STATES): text_sensor.text_sensor_schema(
             icon=ICON_CHARGING_STATES
         ),
