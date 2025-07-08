@@ -15,6 +15,12 @@ BasenBmsBle = basen_bms_ble_ns.class_(
     "BasenBmsBle", ble_client.BLEClientNode, cg.PollingComponent
 )
 
+BASEN_BMS_BLE_COMPONENT_SCHEMA = cv.Schema(
+    {
+        cv.GenerateID(CONF_BASEN_BMS_BLE_ID): cv.use_id(BasenBmsBle),
+    }
+)
+
 CONFIG_SCHEMA = (
     cv.Schema(
         {
