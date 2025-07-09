@@ -585,11 +585,13 @@ void BasenBmsBle::dump_config() {  // NOLINT(google-readability-function-size,re
   LOG_SENSOR("", "Cell Voltage 32", this->cells_[31].cell_voltage_sensor_);
   LOG_SENSOR("", "Cell Voltage 33", this->cells_[32].cell_voltage_sensor_);
   LOG_SENSOR("", "Cell Voltage 34", this->cells_[33].cell_voltage_sensor_);
+  LOG_SENSOR("", "Average Cell Voltage", this->average_cell_voltage_sensor_);
 
   LOG_TEXT_SENSOR("", "Charging states", this->charging_states_text_sensor_);
   LOG_TEXT_SENSOR("", "Discharging states", this->discharging_states_text_sensor_);
   LOG_TEXT_SENSOR("", "Charging warnings", this->charging_warnings_text_sensor_);
   LOG_TEXT_SENSOR("", "Discharging warnings", this->discharging_warnings_text_sensor_);
+  LOG_TEXT_SENSOR("", "Manufacturing Date", this->manufacturing_date_text_sensor_);
 }
 
 void BasenBmsBle::publish_state_(binary_sensor::BinarySensor *binary_sensor, const bool &state) {
