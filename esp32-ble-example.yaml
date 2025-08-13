@@ -27,6 +27,10 @@ wifi:
 
 ota:
   platform: esphome
+  on_begin:
+    then:
+      - switch.turn_off: ble_client_switch0
+      - logger.log: "BLE connection suspended for OTA update"
 
 logger:
   level: DEBUG
@@ -165,6 +169,18 @@ sensor:
     cell_voltage_24:
       name: "${name} cell voltage 24"
 
+switch:
+  - platform: basen_bms_ble
+    charging:
+      name: "${name} charging"
+    discharging:
+      name: "${name} discharging"
+
+  - platform: ble_client
+    ble_client_id: client0
+    name: "${name} enable bluetooth connection"
+    id: ble_client_switch0
+
 text_sensor:
   - platform: basen_bms_ble
     charging_states:
@@ -177,14 +193,3 @@ text_sensor:
       name: "${name} discharging warnings"
     manufacturing_date:
       name: "${name} manufacturing date"
-
-switch:
-  - platform: ble_client
-    ble_client_id: client0
-    name: "${name} enable bluetooth connection"
-
-  - platform: basen_bms_ble
-    charging:
-      name: "${name} charging"
-    discharging:
-      name: "${name} discharging"
