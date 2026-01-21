@@ -179,7 +179,7 @@ void BasenBmsBle::gattc_event_handler(esp_gattc_cb_event_t event, esp_gatt_if_t 
     }
     case ESP_GATTC_NOTIFY_EVT: {
       ESP_LOGVV(TAG, "Notification received (handle 0x%02X): %s", param->notify.handle,
-                format_hex_pretty(param->notify.value, param->notify.value_len).c_str());
+                format_hex_pretty(param->notify.value, param->notify.value_len).c_str());  // NOLINT
 
       this->assemble_(param->notify.value, param->notify.value_len);
       break;
@@ -268,7 +268,7 @@ void BasenBmsBle::on_basen_bms_ble_data(const std::vector<uint8_t> &data) {
       break;
     default:
       ESP_LOGW(TAG, "Unhandled response received (frame_type 0x%02X): %s", frame_type,
-               format_hex_pretty(&data.front(), data.size()).c_str());
+               format_hex_pretty(&data.front(), data.size()).c_str());  // NOLINT
   }
 
   // Send next command after each received frame
@@ -286,7 +286,7 @@ void BasenBmsBle::decode_status_data_(const std::vector<uint8_t> &data) {
   };
 
   ESP_LOGI(TAG, "Status frame (%d+4 bytes):", data.size());
-  ESP_LOGD(TAG, "  %s", format_hex_pretty(&data.front(), data.size()).c_str());
+  ESP_LOGD(TAG, "  %s", format_hex_pretty(&data.front(), data.size()).c_str());  // NOLINT
 
   // Byte Len Payload              Description                      Unit  Precision
   //  0    1  0x3B                 Start of frame
@@ -358,7 +358,7 @@ void BasenBmsBle::decode_general_info_data_(const std::vector<uint8_t> &data) {
   };
 
   ESP_LOGI(TAG, "General info frame (%d+4 bytes):", data.size());
-  ESP_LOGD(TAG, "  %s", format_hex_pretty(&data.front(), data.size()).c_str());
+  ESP_LOGD(TAG, "  %s", format_hex_pretty(&data.front(), data.size()).c_str());  // NOLINT
 
   // Byte Len Payload              Description                      Unit  Precision
   //  0    1  0x3A                 Start of frame
@@ -411,7 +411,7 @@ void BasenBmsBle::decode_cell_voltages_data_(const std::vector<uint8_t> &data) {
   uint8_t cells = data[3] / 2;
 
   ESP_LOGI(TAG, "Cell voltages frame (chunk %d, %d+4 bytes):", data[2] - 36, data.size());
-  ESP_LOGD(TAG, "  %s", format_hex_pretty(&data.front(), data.size()).c_str());
+  ESP_LOGD(TAG, "  %s", format_hex_pretty(&data.front(), data.size()).c_str());  // NOLINT
 
   // Byte Len Payload              Description                      Unit  Precision
   //  0    1  0x3A                 Start of frame
@@ -460,7 +460,7 @@ void BasenBmsBle::decode_cell_voltages_data_(const std::vector<uint8_t> &data) {
 
 void BasenBmsBle::decode_balancing_data_(const std::vector<uint8_t> &data) {
   ESP_LOGI(TAG, "Balancing frame (%d+4 bytes):", data.size());
-  ESP_LOGI(TAG, "  %s", format_hex_pretty(&data.front(), data.size()).c_str());
+  ESP_LOGI(TAG, "  %s", format_hex_pretty(&data.front(), data.size()).c_str());  // NOLINT
 
   // Byte Len Payload              Description                      Unit  Precision
   //  0    1  0x3A                 Start of frame
@@ -494,7 +494,7 @@ void BasenBmsBle::decode_balancing_data_(const std::vector<uint8_t> &data) {
 
 void BasenBmsBle::decode_protect_ic_data_(const std::vector<uint8_t> &data) {
   ESP_LOGI(TAG, "Protect IC frame (%d+4 bytes):", data.size());
-  ESP_LOGI(TAG, "  %s", format_hex_pretty(&data.front(), data.size()).c_str());
+  ESP_LOGI(TAG, "  %s", format_hex_pretty(&data.front(), data.size()).c_str());  // NOLINT
 
   // Byte Len Payload              Description                      Unit  Precision
   //  0    1  0x3A                 Start of frame
@@ -649,7 +649,7 @@ bool BasenBmsBle::send_command_(uint8_t start_of_frame, uint8_t function, uint8_
   frame[8] = BASEN_PKT_END_2;
 
   ESP_LOGV(TAG, "Send command (handle 0x%02X): %s", this->char_command_handle_,
-           format_hex_pretty(frame, sizeof(frame)).c_str());
+           format_hex_pretty(frame, sizeof(frame)).c_str());  // NOLINT
 
   auto status =
       esp_ble_gattc_write_char(this->parent_->get_gattc_if(), this->parent_->get_conn_id(), this->char_command_handle_,
