@@ -36,6 +36,7 @@ CONF_CHARGING_STATES_BITMASK = "charging_states_bitmask"
 CONF_DISCHARGING_STATES_BITMASK = "discharging_states_bitmask"
 CONF_CHARGING_WARNINGS_BITMASK = "charging_warnings_bitmask"
 CONF_DISCHARGING_WARNINGS_BITMASK = "discharging_warnings_bitmask"
+CONF_BALANCING_CELLS_BITMASK = "balancing_cells_bitmask"
 CONF_STATE_OF_CHARGE = "state_of_charge"
 CONF_NOMINAL_CAPACITY = "nominal_capacity"
 CONF_NOMINAL_VOLTAGE = "nominal_voltage"
@@ -101,6 +102,7 @@ ICON_CHARGING_STATES_BITMASK = "mdi:alert-circle-outline"
 ICON_DISCHARGING_STATES_BITMASK = "mdi:alert-circle-outline"
 ICON_CHARGING_WARNINGS_BITMASK = "mdi:alert-circle-outline"
 ICON_DISCHARGING_WARNINGS_BITMASK = "mdi:alert-circle-outline"
+ICON_BALANCING_CELLS_BITMASK = "mdi:battery-sync"
 ICON_REAL_CAPACITY = "mdi:battery-high"
 ICON_SERIAL_NUMBER = "mdi:numeric"
 
@@ -161,6 +163,7 @@ SENSORS = [
     CONF_DISCHARGING_STATES_BITMASK,
     CONF_CHARGING_WARNINGS_BITMASK,
     CONF_DISCHARGING_WARNINGS_BITMASK,
+    CONF_BALANCING_CELLS_BITMASK,
     CONF_STATE_OF_CHARGE,
     CONF_NOMINAL_CAPACITY,
     CONF_NOMINAL_VOLTAGE,
@@ -244,6 +247,13 @@ CONFIG_SCHEMA = BASEN_BMS_BLE_COMPONENT_SCHEMA.extend(
         cv.Optional(CONF_DISCHARGING_WARNINGS_BITMASK): sensor.sensor_schema(
             unit_of_measurement=UNIT_EMPTY,
             icon=ICON_DISCHARGING_WARNINGS_BITMASK,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_EMPTY,
+            state_class=STATE_CLASS_MEASUREMENT,
+        ),
+        cv.Optional(CONF_BALANCING_CELLS_BITMASK): sensor.sensor_schema(
+            unit_of_measurement=UNIT_EMPTY,
+            icon=ICON_BALANCING_CELLS_BITMASK,
             accuracy_decimals=0,
             device_class=DEVICE_CLASS_EMPTY,
             state_class=STATE_CLASS_MEASUREMENT,

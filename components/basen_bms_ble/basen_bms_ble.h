@@ -59,6 +59,9 @@ class BasenBmsBle : public esphome::ble_client::BLEClientNode, public PollingCom
   void set_discharging_warnings_bitmask_sensor(sensor::Sensor *discharging_warnings_bitmask_sensor) {
     discharging_warnings_bitmask_sensor_ = discharging_warnings_bitmask_sensor;
   }
+  void set_balancing_cells_bitmask_sensor(sensor::Sensor *balancing_cells_bitmask_sensor) {
+    balancing_cells_bitmask_sensor_ = balancing_cells_bitmask_sensor;
+  }
   void set_state_of_charge_sensor(sensor::Sensor *state_of_charge_sensor) {
     state_of_charge_sensor_ = state_of_charge_sensor;
   }
@@ -117,6 +120,9 @@ class BasenBmsBle : public esphome::ble_client::BLEClientNode, public PollingCom
   void set_manufacturing_date_text_sensor(text_sensor::TextSensor *manufacturing_date_text_sensor) {
     manufacturing_date_text_sensor_ = manufacturing_date_text_sensor;
   }
+  void set_balancing_cells_text_sensor(text_sensor::TextSensor *balancing_cells_text_sensor) {
+    balancing_cells_text_sensor_ = balancing_cells_text_sensor;
+  }
 
   void write_register(uint8_t address, uint16_t value);
   void on_basen_bms_ble_data(const std::vector<uint8_t> &data);
@@ -136,6 +142,7 @@ class BasenBmsBle : public esphome::ble_client::BLEClientNode, public PollingCom
   sensor::Sensor *discharging_states_bitmask_sensor_;
   sensor::Sensor *charging_warnings_bitmask_sensor_;
   sensor::Sensor *discharging_warnings_bitmask_sensor_;
+  sensor::Sensor *balancing_cells_bitmask_sensor_;
   sensor::Sensor *state_of_charge_sensor_;
   sensor::Sensor *nominal_capacity_sensor_;
   sensor::Sensor *nominal_voltage_sensor_;
@@ -157,6 +164,7 @@ class BasenBmsBle : public esphome::ble_client::BLEClientNode, public PollingCom
   text_sensor::TextSensor *charging_warnings_text_sensor_;
   text_sensor::TextSensor *discharging_warnings_text_sensor_;
   text_sensor::TextSensor *manufacturing_date_text_sensor_;
+  text_sensor::TextSensor *balancing_cells_text_sensor_;
 
   struct Cell {
     sensor::Sensor *cell_voltage_sensor_{nullptr};
