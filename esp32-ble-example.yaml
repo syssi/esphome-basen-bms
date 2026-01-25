@@ -88,6 +88,8 @@ sensor:
       name: "${name} charging warnings bitmask"
     discharging_warnings_bitmask:
       name: "${name} discharging warnings bitmask"
+    balancing_cells_bitmask:
+      name: "${name} balancing cells bitmask"
     state_of_charge:
       name: "${name} state of charge"
     nominal_capacity:
@@ -193,3 +195,5 @@ text_sensor:
       name: "${name} discharging warnings"
     manufacturing_date:
       name: "${name} manufacturing date"
+    balancing_cells:
+      name: "${name} balancing cells"

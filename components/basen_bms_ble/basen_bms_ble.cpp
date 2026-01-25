@@ -466,30 +466,54 @@ void BasenBmsBle::decode_balancing_data_(const std::vector<uint8_t> &data) {
   //  0    1  0x3A                 Start of frame
   //  1    1  0x16                 Address
   //  2    1  0xFE                 Frame type
-  //  3    1  0x13                 Data length
-  //  4    1  0x01
-  //  5    1  0x75
-  //  6    1  0x08
-  //  7    1  0x34
-  //  8    1  0x80
-  //  9    1  0x80
-  //  10   1  0x00
-  //  11   1  0x00
-  //  12   1  0x80
-  //  13   1  0x00
-  //  14   1  0x00
-  //  15   1  0x00
-  //  16   1  0x00
-  //  17   1  0x00
-  //  18   1  0x00
-  //  19   1  0x02
-  //  20   1  0x76
-  //  21   1  0x53
-  //  22   1  0x61
+  //  3    1  0x13                 Data length (19 bytes)
+  //  4    1  0x01                 Unknown
+  //  5    1  0x75                 Unknown
+  //  6    1  0x08                 Unknown
+  //  7    1  0x34                 Unknown
+  //  8    1  0x80                 Balancing bitmask (cells 1-8)
+  //  9    1  0x80                 Balancing bitmask (cells 9-16)
+  //  10   1  0x00                 Balancing bitmask (cells 17-24)
+  //  11   1  0x00                 Balancing bitmask (cells 25-32)
+  //  12   1  0x80                 Balancing bitmask (cells 33-34)
+  //  13   1  0x00                 Unknown
+  //  14   1  0x00                 Unknown
+  //  15   1  0x00                 Unknown
+  //  16   1  0x00                 Unknown
+  //  17   1  0x00                 Unknown
+  //  18   1  0x00                 Unknown
+  //  19   1  0x02                 Unknown
+  //  20   1  0x76                 Unknown
+  //  21   1  0x53                 Unknown
+  //  22   1  0x61                 Unknown
   //  23   1  0x85                 CRC
   //  24   1  0x04                 CRC
   //  25   1  0x0D                 End of frame
   //  26   1  0x0A                 End of frame
+
+  if (data.size() < 13)
+    return;
+
+  bool balancing = false;
+  std::string balancing_cells;
+  uint64_t bitmask = 0;
+  uint8_t cell = 1;
+  for (uint8_t byte_idx = 0; byte_idx < 5 && cell <= 34; byte_idx++) {
+    uint8_t mask = data[8 + byte_idx];
+    for (uint8_t bit = 0; bit < 8 && cell <= 34; bit++, cell++) {
+      if (mask & (1 << bit)) {
+        balancing = true;
+        bitmask |= (1ULL << (cell - 1));
+        if (!balancing_cells.empty())
+          balancing_cells += ", ";
+        balancing_cells += std::to_string(cell);
+      }
+    }
+  }
+
+  this->publish_state_(this->balancing_binary_sensor_, balancing);
+  this->publish_state_(this->balancing_cells_bitmask_sensor_, (float) bitmask);
+  this->publish_state_(this->balancing_cells_text_sensor_, balancing_cells);
 }
 
 void BasenBmsBle::decode_protect_ic_data_(const std::vector<uint8_t> &data) {
@@ -543,6 +567,7 @@ void BasenBmsBle::dump_config() {  // NOLINT(google-readability-function-size,re
   LOG_SENSOR("", "Discharging states bitmask", this->discharging_states_bitmask_sensor_);
   LOG_SENSOR("", "Charging warnings bitmask", this->charging_warnings_bitmask_sensor_);
   LOG_SENSOR("", "Discharging warnings bitmask", this->discharging_warnings_bitmask_sensor_);
+  LOG_SENSOR("", "Balancing cells bitmask", this->balancing_cells_bitmask_sensor_);
   LOG_SENSOR("", "State of charge", this->state_of_charge_sensor_);
   LOG_SENSOR("", "Nominal capacity", this->nominal_capacity_sensor_);
   LOG_SENSOR("", "Nominal voltage", this->nominal_voltage_sensor_);
@@ -599,6 +624,7 @@ void BasenBmsBle::dump_config() {  // NOLINT(google-readability-function-size,re
   LOG_TEXT_SENSOR("", "Charging warnings", this->charging_warnings_text_sensor_);
   LOG_TEXT_SENSOR("", "Discharging warnings", this->discharging_warnings_text_sensor_);
   LOG_TEXT_SENSOR("", "Manufacturing Date", this->manufacturing_date_text_sensor_);
+  LOG_TEXT_SENSOR("", "Balancing cells", this->balancing_cells_text_sensor_);
 }
 
 void BasenBmsBle::publish_state_(binary_sensor::BinarySensor *binary_sensor, const bool &state) {

@@ -14,12 +14,14 @@ CONF_DISCHARGING_STATES = "discharging_states"
 CONF_CHARGING_WARNINGS = "charging_warnings"
 CONF_DISCHARGING_WARNINGS = "discharging_warnings"
 CONF_MANUFACTURING_DATE = "manufacturing_date"
+CONF_BALANCING_CELLS = "balancing_cells"
 
 ICON_CHARGING_STATES = "mdi:alert-circle-outline"
 ICON_DISCHARGING_STATES = "mdi:alert-circle-outline"
 ICON_CHARGING_WARNINGS = "mdi:alert-circle-outline"
 ICON_DISCHARGING_WARNINGS = "mdi:alert-circle-outline"
 ICON_MANUFACTURING_DATE = "mdi:factory"
+ICON_BALANCING_CELLS = "mdi:battery-sync"
 
 TEXT_SENSORS = [
     CONF_CHARGING_STATES,
@@ -27,6 +29,7 @@ TEXT_SENSORS = [
     CONF_CHARGING_WARNINGS,
     CONF_DISCHARGING_WARNINGS,
     CONF_MANUFACTURING_DATE,
+    CONF_BALANCING_CELLS,
 ]
 
 CONFIG_SCHEMA = BASEN_BMS_BLE_COMPONENT_SCHEMA.extend(
@@ -45,6 +48,9 @@ CONFIG_SCHEMA = BASEN_BMS_BLE_COMPONENT_SCHEMA.extend(
         ),
         cv.Optional(CONF_MANUFACTURING_DATE): text_sensor.text_sensor_schema(
             icon=ICON_MANUFACTURING_DATE
+        ),
+        cv.Optional(CONF_BALANCING_CELLS): text_sensor.text_sensor_schema(
+            icon=ICON_BALANCING_CELLS
         ),
     }
 )
