@@ -181,6 +181,8 @@ class BasenBmsBle : public esphome::ble_client::BLEClientNode, public PollingCom
 
   float min_cell_voltage_{100.0f};
   float max_cell_voltage_{-100.0f};
+  float cell_voltage_sum_{0.0f};
+  uint8_t cell_count_{0};
   uint8_t max_voltage_cell_{0};
   uint8_t min_voltage_cell_{0};
 
