@@ -432,13 +432,17 @@ void BasenBmsBle::decode_cell_voltages_data_(const std::vector<uint8_t> &data) {
   //  26   1  0x00 0x00            Cell voltage 12
   for (uint8_t i = 0; i < cells; i++) {
     float cell_voltage = basen_get_16bit((i * 2) + 4) * 0.001f;
-    if (cell_voltage > 0 && cell_voltage < this->min_cell_voltage_) {
-      this->min_cell_voltage_ = cell_voltage;
-      this->min_voltage_cell_ = i + offset + 1;
-    }
-    if (cell_voltage > this->max_cell_voltage_) {
-      this->max_cell_voltage_ = cell_voltage;
-      this->max_voltage_cell_ = i + offset + 1;
+    if (cell_voltage > 0) {
+      this->cell_voltage_sum_ += cell_voltage;
+      this->cell_count_++;
+      if (cell_voltage < this->min_cell_voltage_) {
+        this->min_cell_voltage_ = cell_voltage;
+        this->min_voltage_cell_ = i + offset + 1;
+      }
+      if (cell_voltage > this->max_cell_voltage_) {
+        this->max_cell_voltage_ = cell_voltage;
+        this->max_voltage_cell_ = i + offset + 1;
+      }
     }
     this->publish_state_(this->cells_[i + offset].cell_voltage_sensor_, cell_voltage);
   }
@@ -450,6 +454,14 @@ void BasenBmsBle::decode_cell_voltages_data_(const std::vector<uint8_t> &data) {
     this->publish_state_(this->max_voltage_cell_sensor_, (float) this->max_voltage_cell_);
     this->publish_state_(this->min_voltage_cell_sensor_, (float) this->min_voltage_cell_);
     this->publish_state_(this->delta_cell_voltage_sensor_, this->max_cell_voltage_ - this->min_cell_voltage_);
+    if (this->cell_count_ > 0) {
+      this->publish_state_(this->average_cell_voltage_sensor_, this->cell_voltage_sum_ / this->cell_count_);
+    }
+
+    this->min_cell_voltage_ = 100.0f;
+    this->max_cell_voltage_ = -100.0f;
+    this->cell_voltage_sum_ = 0.0f;
+    this->cell_count_ = 0;
   }
 
   //  28   1  0x6A                 CRC
