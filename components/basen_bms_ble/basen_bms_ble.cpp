@@ -389,8 +389,10 @@ void BasenBmsBle::decode_general_info_data_(const std::vector<uint8_t> &data) {
     uint16_t year = ((raw_date >> 9) & 127) + 1980;
     uint8_t month = (raw_date >> 5) & 15;
     uint8_t day = 31 & raw_date;
-    this->publish_state_(this->manufacturing_date_text_sensor_,
-                         to_string(year) + "." + to_string(month) + "." + to_string(day));
+
+    char date_buf[12];
+    snprintf(date_buf, sizeof(date_buf), "%u.%u.%u", year, month, day);
+    this->publish_state_(this->manufacturing_date_text_sensor_, date_buf);
   }
 
   //  26   2  0x07 0x00            Charging cycles
@@ -518,7 +520,10 @@ void BasenBmsBle::decode_balancing_data_(const std::vector<uint8_t> &data) {
         bitmask |= (1ULL << (cell - 1));
         if (!balancing_cells.empty())
           balancing_cells += ", ";
-        balancing_cells += std::to_string(cell);
+
+        char cell_buf[4];
+        snprintf(cell_buf, sizeof(cell_buf), "%u", cell);
+        balancing_cells += cell_buf;
       }
     }
   }
