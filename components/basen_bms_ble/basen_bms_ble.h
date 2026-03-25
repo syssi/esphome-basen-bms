@@ -128,43 +128,43 @@ class BasenBmsBle : public esphome::ble_client::BLEClientNode, public PollingCom
   void on_basen_bms_ble_data(const std::vector<uint8_t> &data);
 
  protected:
-  binary_sensor::BinarySensor *balancing_binary_sensor_;
-  binary_sensor::BinarySensor *charging_binary_sensor_;
-  binary_sensor::BinarySensor *discharging_binary_sensor_;
+  binary_sensor::BinarySensor *balancing_binary_sensor_{nullptr};
+  binary_sensor::BinarySensor *charging_binary_sensor_{nullptr};
+  binary_sensor::BinarySensor *discharging_binary_sensor_{nullptr};
 
-  sensor::Sensor *total_voltage_sensor_;
-  sensor::Sensor *current_sensor_;
-  sensor::Sensor *power_sensor_;
-  sensor::Sensor *charging_power_sensor_;
-  sensor::Sensor *discharging_power_sensor_;
-  sensor::Sensor *capacity_remaining_sensor_;
-  sensor::Sensor *charging_states_bitmask_sensor_;
-  sensor::Sensor *discharging_states_bitmask_sensor_;
-  sensor::Sensor *charging_warnings_bitmask_sensor_;
-  sensor::Sensor *discharging_warnings_bitmask_sensor_;
-  sensor::Sensor *balancing_cells_bitmask_sensor_;
-  sensor::Sensor *state_of_charge_sensor_;
-  sensor::Sensor *nominal_capacity_sensor_;
-  sensor::Sensor *nominal_voltage_sensor_;
-  sensor::Sensor *real_capacity_sensor_;
-  sensor::Sensor *serial_number_sensor_;
-  sensor::Sensor *charging_cycles_sensor_;
-  sensor::Sensor *min_cell_voltage_sensor_;
-  sensor::Sensor *max_cell_voltage_sensor_;
-  sensor::Sensor *min_voltage_cell_sensor_;
-  sensor::Sensor *max_voltage_cell_sensor_;
-  sensor::Sensor *delta_cell_voltage_sensor_;
-  sensor::Sensor *average_cell_voltage_sensor_;
+  sensor::Sensor *total_voltage_sensor_{nullptr};
+  sensor::Sensor *current_sensor_{nullptr};
+  sensor::Sensor *power_sensor_{nullptr};
+  sensor::Sensor *charging_power_sensor_{nullptr};
+  sensor::Sensor *discharging_power_sensor_{nullptr};
+  sensor::Sensor *capacity_remaining_sensor_{nullptr};
+  sensor::Sensor *charging_states_bitmask_sensor_{nullptr};
+  sensor::Sensor *discharging_states_bitmask_sensor_{nullptr};
+  sensor::Sensor *charging_warnings_bitmask_sensor_{nullptr};
+  sensor::Sensor *discharging_warnings_bitmask_sensor_{nullptr};
+  sensor::Sensor *balancing_cells_bitmask_sensor_{nullptr};
+  sensor::Sensor *state_of_charge_sensor_{nullptr};
+  sensor::Sensor *nominal_capacity_sensor_{nullptr};
+  sensor::Sensor *nominal_voltage_sensor_{nullptr};
+  sensor::Sensor *real_capacity_sensor_{nullptr};
+  sensor::Sensor *serial_number_sensor_{nullptr};
+  sensor::Sensor *charging_cycles_sensor_{nullptr};
+  sensor::Sensor *min_cell_voltage_sensor_{nullptr};
+  sensor::Sensor *max_cell_voltage_sensor_{nullptr};
+  sensor::Sensor *min_voltage_cell_sensor_{nullptr};
+  sensor::Sensor *max_voltage_cell_sensor_{nullptr};
+  sensor::Sensor *delta_cell_voltage_sensor_{nullptr};
+  sensor::Sensor *average_cell_voltage_sensor_{nullptr};
 
-  switch_::Switch *charging_switch_;
-  switch_::Switch *discharging_switch_;
+  switch_::Switch *charging_switch_{nullptr};
+  switch_::Switch *discharging_switch_{nullptr};
 
-  text_sensor::TextSensor *charging_states_text_sensor_;
-  text_sensor::TextSensor *discharging_states_text_sensor_;
-  text_sensor::TextSensor *charging_warnings_text_sensor_;
-  text_sensor::TextSensor *discharging_warnings_text_sensor_;
-  text_sensor::TextSensor *manufacturing_date_text_sensor_;
-  text_sensor::TextSensor *balancing_cells_text_sensor_;
+  text_sensor::TextSensor *charging_states_text_sensor_{nullptr};
+  text_sensor::TextSensor *discharging_states_text_sensor_{nullptr};
+  text_sensor::TextSensor *charging_warnings_text_sensor_{nullptr};
+  text_sensor::TextSensor *discharging_warnings_text_sensor_{nullptr};
+  text_sensor::TextSensor *manufacturing_date_text_sensor_{nullptr};
+  text_sensor::TextSensor *balancing_cells_text_sensor_{nullptr};
 
   struct Cell {
     sensor::Sensor *cell_voltage_sensor_{nullptr};
