@@ -26,10 +26,10 @@ CONFIG_SCHEMA = BASEN_BMS_BLE_COMPONENT_SCHEMA.extend(
     {
         cv.Optional(CONF_CHARGING): switch.switch_schema(
             BasenSwitch, icon=ICON_CHARGING
-        ).extend(cv.COMPONENT_SCHEMA),
+        ),
         cv.Optional(CONF_DISCHARGING): switch.switch_schema(
             BasenSwitch, icon=ICON_DISCHARGING
-        ).extend(cv.COMPONENT_SCHEMA),
+        ),
     }
 )
 
