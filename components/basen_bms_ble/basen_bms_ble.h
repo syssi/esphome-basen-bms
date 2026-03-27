@@ -175,8 +175,8 @@ class BasenBmsBle : public esphome::ble_client::BLEClientNode, public PollingCom
   } temperatures_[4];
 
   std::vector<uint8_t> frame_buffer_;
-  uint16_t char_notify_handle_;
-  uint16_t char_command_handle_;
+  uint16_t char_notify_handle_{0};
+  uint16_t char_command_handle_{0};
   uint8_t next_command_{5};
 
   float min_cell_voltage_{100.0f};
