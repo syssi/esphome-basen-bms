@@ -1,6 +1,7 @@
 import esphome.codegen as cg
 from esphome.components import text_sensor
 import esphome.config_validation as cv
+from esphome.const import ENTITY_CATEGORY_DIAGNOSTIC
 
 from . import BASEN_BMS_BLE_COMPONENT_SCHEMA, CONF_BASEN_BMS_BLE_ID
 
@@ -46,7 +47,8 @@ CONFIG_SCHEMA = BASEN_BMS_BLE_COMPONENT_SCHEMA.extend(
             icon=ICON_DISCHARGING_WARNINGS
         ),
         cv.Optional(CONF_MANUFACTURING_DATE): text_sensor.text_sensor_schema(
-            icon=ICON_MANUFACTURING_DATE
+            icon=ICON_MANUFACTURING_DATE,
+            entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
         ),
         cv.Optional(CONF_BALANCING_CELLS): text_sensor.text_sensor_schema(
             icon=ICON_BALANCING_CELLS
