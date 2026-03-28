@@ -46,4 +46,4 @@ basen_bms_ble:
 sensor:
   - platform: basen_bms_ble
     total_voltage:
-      name: "${name} total voltage"
+      name: "total voltage"
