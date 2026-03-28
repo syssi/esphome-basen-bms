@@ -75,368 +75,368 @@ binary_sensor:
   - platform: basen_bms_ble
     basen_bms_ble_id: bms0
     balancing:
-      name: "${bms0} balancing"
+      name: "balancing"
       device_id: device0
     charging:
-      name: "${bms0} charging"
+      name: "charging"
       device_id: device0
     discharging:
-      name: "${bms0} discharging"
+      name: "discharging"
       device_id: device0
 
   - platform: basen_bms_ble
     basen_bms_ble_id: bms1
     balancing:
-      name: "${bms1} balancing"
+      name: "balancing"
       device_id: device1
     charging:
-      name: "${bms1} charging"
+      name: "charging"
       device_id: device1
     discharging:
-      name: "${bms1} discharging"
+      name: "discharging"
       device_id: device1
 
 sensor:
   - platform: basen_bms_ble
     basen_bms_ble_id: bms0
     total_voltage:
-      name: "${bms0} total voltage"
+      name: "total voltage"
       device_id: device0
     current:
-      name: "${bms0} current"
+      name: "current"
       device_id: device0
     power:
-      name: "${bms0} power"
+      name: "power"
       device_id: device0
     charging_power:
-      name: "${bms0} charging power"
+      name: "charging power"
       device_id: device0
     discharging_power:
-      name: "${bms0} discharging power"
+      name: "discharging power"
       device_id: device0
     capacity_remaining:
-      name: "${bms0} capacity remaining"
+      name: "capacity remaining"
       device_id: device0
     charging_states_bitmask:
-      name: "${bms0} charging states bitmask"
+      name: "charging states bitmask"
       device_id: device0
     discharging_states_bitmask:
-      name: "${bms0} discharging states bitmask"
+      name: "discharging states bitmask"
       device_id: device0
     charging_warnings_bitmask:
-      name: "${bms0} charging warnings bitmask"
+      name: "charging warnings bitmask"
       device_id: device0
     discharging_warnings_bitmask:
-      name: "${bms0} discharging warnings bitmask"
+      name: "discharging warnings bitmask"
       device_id: device0
     balancing_cells_bitmask:
-      name: "${bms0} balancing cells bitmask"
+      name: "balancing cells bitmask"
       device_id: device0
     state_of_charge:
-      name: "${bms0} state of charge"
+      name: "state of charge"
       device_id: device0
     nominal_capacity:
-      name: "${bms0} nominal capacity"
+      name: "nominal capacity"
       device_id: device0
     nominal_voltage:
-      name: "${bms0} nominal voltage"
+      name: "nominal voltage"
       device_id: device0
     real_capacity:
-      name: "${bms0} real capacity"
+      name: "real capacity"
       device_id: device0
     serial_number:
-      name: "${bms0} serial number"
+      name: "serial number"
       device_id: device0
     charging_cycles:
-      name: "${bms0} charging cycles"
+      name: "charging cycles"
       device_id: device0
     min_cell_voltage:
-      name: "${bms0} min cell voltage"
+      name: "min cell voltage"
       device_id: device0
     max_cell_voltage:
-      name: "${bms0} max cell voltage"
+      name: "max cell voltage"
       device_id: device0
     min_voltage_cell:
-      name: "${bms0} min voltage cell"
+      name: "min voltage cell"
       device_id: device0
     max_voltage_cell:
-      name: "${bms0} max voltage cell"
+      name: "max voltage cell"
       device_id: device0
     delta_cell_voltage:
-      name: "${bms0} delta cell voltage"
+      name: "delta cell voltage"
       device_id: device0
     average_cell_voltage:
-      name: "${bms0} average cell voltage"
+      name: "average cell voltage"
       device_id: device0
     temperature_1:
-      name: "${bms0} temperature 1"
+      name: "temperature 1"
       device_id: device0
     temperature_2:
-      name: "${bms0} temperature 2"
+      name: "temperature 2"
       device_id: device0
     temperature_3:
-      name: "${bms0} temperature 3"
+      name: "temperature 3"
       device_id: device0
     temperature_4:
-      name: "${bms0} temperature 4"
+      name: "temperature 4"
       device_id: device0
     cell_voltage_1:
-      name: "${bms0} cell voltage 1"
+      name: "cell voltage 1"
       device_id: device0
     cell_voltage_2:
-      name: "${bms0} cell voltage 2"
+      name: "cell voltage 2"
       device_id: device0
     cell_voltage_3:
-      name: "${bms0} cell voltage 3"
+      name: "cell voltage 3"
       device_id: device0
     cell_voltage_4:
-      name: "${bms0} cell voltage 4"
+      name: "cell voltage 4"
       device_id: device0
     cell_voltage_5:
-      name: "${bms0} cell voltage 5"
+      name: "cell voltage 5"
       device_id: device0
     cell_voltage_6:
-      name: "${bms0} cell voltage 6"
+      name: "cell voltage 6"
       device_id: device0
     cell_voltage_7:
-      name: "${bms0} cell voltage 7"
+      name: "cell voltage 7"
       device_id: device0
     cell_voltage_8:
-      name: "${bms0} cell voltage 8"
+      name: "cell voltage 8"
       device_id: device0
     cell_voltage_9:
-      name: "${bms0} cell voltage 9"
+      name: "cell voltage 9"
       device_id: device0
     cell_voltage_10:
-      name: "${bms0} cell voltage 10"
+      name: "cell voltage 10"
       device_id: device0
     cell_voltage_11:
-      name: "${bms0} cell voltage 11"
+      name: "cell voltage 11"
       device_id: device0
     cell_voltage_12:
-      name: "${bms0} cell voltage 12"
+      name: "cell voltage 12"
       device_id: device0
     cell_voltage_13:
-      name: "${bms0} cell voltage 13"
+      name: "cell voltage 13"
       device_id: device0
     cell_voltage_14:
-      name: "${bms0} cell voltage 14"
+      name: "cell voltage 14"
       device_id: device0
     cell_voltage_15:
-      name: "${bms0} cell voltage 15"
+      name: "cell voltage 15"
       device_id: device0
     cell_voltage_16:
-      name: "${bms0} cell voltage 16"
+      name: "cell voltage 16"
       device_id: device0
     cell_voltage_17:
-      name: "${bms0} cell voltage 17"
+      name: "cell voltage 17"
       device_id: device0
     cell_voltage_18:
-      name: "${bms0} cell voltage 18"
+      name: "cell voltage 18"
       device_id: device0
     cell_voltage_19:
-      name: "${bms0} cell voltage 19"
+      name: "cell voltage 19"
       device_id: device0
     cell_voltage_20:
-      name: "${bms0} cell voltage 20"
+      name: "cell voltage 20"
       device_id: device0
     cell_voltage_21:
-      name: "${bms0} cell voltage 21"
+      name: "cell voltage 21"
       device_id: device0
     cell_voltage_22:
-      name: "${bms0} cell voltage 22"
+      name: "cell voltage 22"
       device_id: device0
     cell_voltage_23:
-      name: "${bms0} cell voltage 23"
+      name: "cell voltage 23"
       device_id: device0
     cell_voltage_24:
-      name: "${bms0} cell voltage 24"
+      name: "cell voltage 24"
       device_id: device0
 
   - platform: basen_bms_ble
     basen_bms_ble_id: bms1
     total_voltage:
-      name: "${bms1} total voltage"
+      name: "total voltage"
       device_id: device1
     current:
-      name: "${bms1} current"
+      name: "current"
       device_id: device1
     power:
-      name: "${bms1} power"
+      name: "power"
       device_id: device1
     charging_power:
-      name: "${bms1} charging power"
+      name: "charging power"
       device_id: device1
     discharging_power:
-      name: "${bms1} discharging power"
+      name: "discharging power"
       device_id: device1
     capacity_remaining:
-      name: "${bms1} capacity remaining"
+      name: "capacity remaining"
       device_id: device1
     charging_states_bitmask:
-      name: "${bms1} charging states bitmask"
+      name: "charging states bitmask"
       device_id: device1
     discharging_states_bitmask:
-      name: "${bms1} discharging states bitmask"
+      name: "discharging states bitmask"
       device_id: device1
     charging_warnings_bitmask:
-      name: "${bms1} charging warnings bitmask"
+      name: "charging warnings bitmask"
       device_id: device1
     discharging_warnings_bitmask:
-      name: "${bms1} discharging warnings bitmask"
+      name: "discharging warnings bitmask"
       device_id: device1
     balancing_cells_bitmask:
-      name: "${bms1} balancing cells bitmask"
+      name: "balancing cells bitmask"
       device_id: device1
     state_of_charge:
-      name: "${bms1} state of charge"
+      name: "state of charge"
       device_id: device1
     nominal_capacity:
-      name: "${bms1} nominal capacity"
+      name: "nominal capacity"
       device_id: device1
     nominal_voltage:
-      name: "${bms1} nominal voltage"
+      name: "nominal voltage"
       device_id: device1
     real_capacity:
-      name: "${bms1} real capacity"
+      name: "real capacity"
       device_id: device1
     serial_number:
-      name: "${bms1} serial number"
+      name: "serial number"
       device_id: device1
     charging_cycles:
-      name: "${bms1} charging cycles"
+      name: "charging cycles"
       device_id: device1
     min_cell_voltage:
-      name: "${bms1} min cell voltage"
+      name: "min cell voltage"
       device_id: device1
     max_cell_voltage:
-      name: "${bms1} max cell voltage"
+      name: "max cell voltage"
       device_id: device1
     min_voltage_cell:
-      name: "${bms1} min voltage cell"
+      name: "min voltage cell"
       device_id: device1
     max_voltage_cell:
-      name: "${bms1} max voltage cell"
+      name: "max voltage cell"
       device_id: device1
     delta_cell_voltage:
-      name: "${bms1} delta cell voltage"
+      name: "delta cell voltage"
       device_id: device1
     average_cell_voltage:
-      name: "${bms1} average cell voltage"
+      name: "average cell voltage"
       device_id: device1
     temperature_1:
-      name: "${bms1} temperature 1"
+      name: "temperature 1"
       device_id: device1
     temperature_2:
-      name: "${bms1} temperature 2"
+      name: "temperature 2"
       device_id: device1
     temperature_3:
-      name: "${bms1} temperature 3"
+      name: "temperature 3"
       device_id: device1
     temperature_4:
-      name: "${bms1} temperature 4"
+      name: "temperature 4"
       device_id: device1
     cell_voltage_1:
-      name: "${bms1} cell voltage 1"
+      name: "cell voltage 1"
       device_id: device1
     cell_voltage_2:
-      name: "${bms1} cell voltage 2"
+      name: "cell voltage 2"
       device_id: device1
     cell_voltage_3:
-      name: "${bms1} cell voltage 3"
+      name: "cell voltage 3"
       device_id: device1
     cell_voltage_4:
-      name: "${bms1} cell voltage 4"
+      name: "cell voltage 4"
       device_id: device1
     cell_voltage_5:
-      name: "${bms1} cell voltage 5"
+      name: "cell voltage 5"
       device_id: device1
     cell_voltage_6:
-      name: "${bms1} cell voltage 6"
+      name: "cell voltage 6"
       device_id: device1
     cell_voltage_7:
-      name: "${bms1} cell voltage 7"
+      name: "cell voltage 7"
       device_id: device1
     cell_voltage_8:
-      name: "${bms1} cell voltage 8"
+      name: "cell voltage 8"
       device_id: device1
     cell_voltage_9:
-      name: "${bms1} cell voltage 9"
+      name: "cell voltage 9"
       device_id: device1
     cell_voltage_10:
-      name: "${bms1} cell voltage 10"
+      name: "cell voltage 10"
       device_id: device1
     cell_voltage_11:
-      name: "${bms1} cell voltage 11"
+      name: "cell voltage 11"
       device_id: device1
     cell_voltage_12:
-      name: "${bms1} cell voltage 12"
+      name: "cell voltage 12"
       device_id: device1
     cell_voltage_13:
-      name: "${bms1} cell voltage 13"
+      name: "cell voltage 13"
       device_id: device1
     cell_voltage_14:
-      name: "${bms1} cell voltage 14"
+      name: "cell voltage 14"
       device_id: device1
     cell_voltage_15:
-      name: "${bms1} cell voltage 15"
+      name: "cell voltage 15"
       device_id: device1
     cell_voltage_16:
-      name: "${bms1} cell voltage 16"
+      name: "cell voltage 16"
       device_id: device1
     cell_voltage_17:
-      name: "${bms1} cell voltage 17"
+      name: "cell voltage 17"
       device_id: device1
     cell_voltage_18:
-      name: "${bms1} cell voltage 18"
+      name: "cell voltage 18"
       device_id: device1
     cell_voltage_19:
-      name: "${bms1} cell voltage 19"
+      name: "cell voltage 19"
       device_id: device1
     cell_voltage_20:
-      name: "${bms1} cell voltage 20"
+      name: "cell voltage 20"
       device_id: device1
     cell_voltage_21:
-      name: "${bms1} cell voltage 21"
+      name: "cell voltage 21"
       device_id: device1
     cell_voltage_22:
-      name: "${bms1} cell voltage 22"
+      name: "cell voltage 22"
       device_id: device1
     cell_voltage_23:
-      name: "${bms1} cell voltage 23"
+      name: "cell voltage 23"
       device_id: device1
     cell_voltage_24:
-      name: "${bms1} cell voltage 24"
+      name: "cell voltage 24"
       device_id: device1
 
 switch:
   - platform: basen_bms_ble
     basen_bms_ble_id: bms0
     charging:
-      name: "${bms0} charging"
+      name: "charging"
       device_id: device0
     discharging:
-      name: "${bms0} discharging"
+      name: "discharging"
       device_id: device0
 
   - platform: basen_bms_ble
     basen_bms_ble_id: bms1
     charging:
-      name: "${bms1} charging"
+      name: "charging"
       device_id: device1
     discharging:
-      name: "${bms1} discharging"
+      name: "discharging"
       device_id: device1
 
   - platform: ble_client
     ble_client_id: client0
-    name: "${bms0} enable bluetooth connection"
+    name: "enable bluetooth connection"
     id: ble_client_switch0
     device_id: device0
 
   - platform: ble_client
     ble_client_id: client1
-    name: "${bms1} enable bluetooth connection"
+    name: "enable bluetooth connection"
     id: ble_client_switch1
     device_id: device1
 
@@ -444,41 +444,41 @@ text_sensor:
   - platform: basen_bms_ble
     basen_bms_ble_id: bms0
     charging_states:
-      name: "${bms0} charging states"
+      name: "charging states"
       device_id: device0
     discharging_states:
-      name: "${bms0} discharging states"
+      name: "discharging states"
       device_id: device0
     charging_warnings:
-      name: "${bms0} charging warnings"
+      name: "charging warnings"
       device_id: device0
     discharging_warnings:
-      name: "${bms0} discharging warnings"
+      name: "discharging warnings"
       device_id: device0
     manufacturing_date:
-      name: "${bms0} manufacturing date"
+      name: "manufacturing date"
       device_id: device0
     balancing_cells:
-      name: "${bms0} balancing cells"
+      name: "balancing cells"
       device_id: device0
 
   - platform: basen_bms_ble
     basen_bms_ble_id: bms1
     charging_states:
-      name: "${bms1} charging states"
+      name: "charging states"
       device_id: device1
     discharging_states:
-      name: "${bms1} discharging states"
+      name: "discharging states"
       device_id: device1
     charging_warnings:
-      name: "${bms1} charging warnings"
+      name: "charging warnings"
       device_id: device1
     discharging_warnings:
-      name: "${bms1} discharging warnings"
+      name: "discharging warnings"
       device_id: device1
     manufacturing_date:
-      name: "${bms1} manufacturing date"
+      name: "manufacturing date"
       device_id: device1
     balancing_cells:
-      name: "${bms1} balancing cells"
+      name: "balancing cells"
       device_id: device1
