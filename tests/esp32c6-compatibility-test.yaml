@@ -5,6 +5,7 @@ substitutions:
 
 esphome:
   name: ${name}
+  friendly_name: ${name}
   comment: ${device_description}
 
 esp32:
@@ -46,4 +47,4 @@ basen_bms_ble:
 sensor:
   - platform: basen_bms_ble
     total_voltage:
-      name: "${name} total voltage"
+      name: "total voltage"
