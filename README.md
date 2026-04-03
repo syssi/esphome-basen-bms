@@ -84,10 +84,10 @@ esphome run esp32-example.yaml
 [binary_sensor:036]: 'basen-bms-ble discharging': Sending state ON
 [switch:056]: 'basen-bms-ble discharging': Sending state ON
 [sensor:127]: 'basen-bms-ble charging warnings bitmask': Sending state 0.00000  with 0 decimals of accuracy
-[text_sensor:016]: 'basen-bms-ble charging warnings': Received new state 
+[text_sensor:016]: 'basen-bms-ble charging warnings': Received new state
 [text_sensor:067]: 'basen-bms-ble charging warnings': Sending state ''
 [sensor:127]: 'basen-bms-ble charging warnings bitmask': Sending state 0.00000  with 0 decimals of accuracy
-[text_sensor:016]: 'basen-bms-ble charging warnings': Received new state 
+[text_sensor:016]: 'basen-bms-ble charging warnings': Received new state
 [text_sensor:067]: 'basen-bms-ble charging warnings': Sending state ''
 [sensor:127]: 'basen-bms-ble state of charge': Sending state 14.00000 % with 0 decimals of accuracy
 [basen_bms_ble:349]: General info frame (28+4 bytes):
