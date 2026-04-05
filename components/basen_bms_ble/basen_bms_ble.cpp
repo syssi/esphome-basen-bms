@@ -46,7 +46,7 @@ static const uint8_t BASEN_COMMAND_QUEUE[BASEN_COMMAND_QUEUE_SIZE] = {
 };
 
 static const uint8_t CHARGING_STATES_SIZE = 8;
-static const char *const CHARGING_STATES[CHARGING_STATES_SIZE] = {
+static constexpr const char *const CHARGING_STATES[CHARGING_STATES_SIZE] = {
     "Overcurrent protection (SOCC)",  // 0000 0001
     "Over temperature (OTC)",         // 0000 0010
     "Undertemperature (UTC)",         // 0000 0100
@@ -58,7 +58,7 @@ static const char *const CHARGING_STATES[CHARGING_STATES_SIZE] = {
 };
 
 static const uint8_t CHARGING_WARNINGS_SIZE = 8;
-static const char *const CHARGING_WARNINGS[CHARGING_WARNINGS_SIZE] = {
+static constexpr const char *const CHARGING_WARNINGS[CHARGING_WARNINGS_SIZE] = {
     "Overcurrent (OCC1)",          // 0000 0001
     "Over temperature (OTC)",      // 0000 0010
     "Undertemperature (UTC1)",     // 0000 0100
@@ -70,7 +70,7 @@ static const char *const CHARGING_WARNINGS[CHARGING_WARNINGS_SIZE] = {
 };
 
 static const uint8_t DISCHARGING_STATES_SIZE = 8;
-static const char *const DISCHARGING_STATES[DISCHARGING_STATES_SIZE] = {
+static constexpr const char *const DISCHARGING_STATES[DISCHARGING_STATES_SIZE] = {
     "Overcurrent protection (SOCD)",    // 0000 0001
     "Over temperature (OTD)",           // 0000 0010
     "Undertemperature (UTD)",           // 0000 0100
@@ -82,7 +82,7 @@ static const char *const DISCHARGING_STATES[DISCHARGING_STATES_SIZE] = {
 };
 
 static const uint8_t DISCHARGING_WARNINGS_SIZE = 8;
-static const char *const DISCHARGING_WARNINGS[DISCHARGING_WARNINGS_SIZE] = {
+static constexpr const char *const DISCHARGING_WARNINGS[DISCHARGING_WARNINGS_SIZE] = {
     "Overcurrent (OCD1)",                     // 0000 0001
     "Over temperature (OTD1)",                // 0000 0010
     "Undertemperature (UTD1)",                // 0000 0100
