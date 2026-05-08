@@ -4,8 +4,7 @@
 #include "esphome/core/component.h"
 #include "esphome/components/switch/switch.h"
 
-namespace esphome {
-namespace basen_bms_ble {
+namespace esphome::basen_bms_ble {
 
 class BasenBmsBle;
 class BasenSwitch : public switch_::Switch, public Component {
@@ -22,5 +21,4 @@ class BasenSwitch : public switch_::Switch, public Component {
   uint8_t holding_register_;
 };
 
-}  // namespace basen_bms_ble
-}  // namespace esphome
+}  // namespace esphome::basen_bms_ble

@@ -9,8 +9,7 @@
 #define ADDR_STR(x) (x).c_str()
 #endif
 
-namespace esphome {
-namespace basen_bms_ble {
+namespace esphome::basen_bms_ble {
 
 static const char *const TAG = "basen_bms_ble";
 
@@ -769,5 +768,4 @@ std::string BasenBmsBle::discharging_warnings_bits_to_string_(const uint8_t mask
   return values;
 }
 
-}  // namespace basen_bms_ble
-}  // namespace esphome
+}  // namespace esphome::basen_bms_ble

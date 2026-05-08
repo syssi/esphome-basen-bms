@@ -2,8 +2,7 @@
 #include "esphome/core/log.h"
 #include "esphome/core/application.h"
 
-namespace esphome {
-namespace basen_bms_ble {
+namespace esphome::basen_bms_ble {
 
 static const char *const TAG = "basen_bms_ble.switch";
 
@@ -12,5 +11,4 @@ void BasenSwitch::write_state(bool state) {
   // this->parent_->write_register(this->holding_register_, (uint16_t) state);
 }
 
-}  // namespace basen_bms_ble
-}  // namespace esphome
+}  // namespace esphome::basen_bms_ble
