@@ -92,6 +92,7 @@ static constexpr const char *const DISCHARGING_WARNINGS[DISCHARGING_WARNINGS_SIZ
     "Battery empty (FD)",                     // 1000 0000
 };
 
+#ifdef USE_ESP32
 void BasenBmsBle::gattc_event_handler(esp_gattc_cb_event_t event, esp_gatt_if_t gattc_if,
                                       esp_ble_gattc_cb_param_t *param) {
   switch (event) {
@@ -243,6 +244,9 @@ void BasenBmsBle::update() {
   this->next_command_ = 0;
   this->send_command_(BASEN_PKT_START_A, BASEN_COMMAND_QUEUE[this->next_command_++ % BASEN_COMMAND_QUEUE_SIZE]);
 }
+#else
+void BasenBmsBle::update() {}
+#endif  // USE_ESP32
 
 void BasenBmsBle::on_basen_bms_ble_data(const std::vector<uint8_t> &data) {
   uint8_t frame_type = data[2];
@@ -675,6 +679,7 @@ void BasenBmsBle::write_register(uint8_t address, uint16_t value) {
   // this->send_command_(BASEN_CMD_WRITE, BASEN_CMD_MOS);  // @TODO: Pass value
 }
 
+#ifdef USE_ESP32
 bool BasenBmsBle::send_command_(uint8_t start_of_frame, uint8_t function, uint8_t value) {
   uint8_t frame[9];
   uint8_t data_len = 1;
@@ -703,9 +708,12 @@ bool BasenBmsBle::send_command_(uint8_t start_of_frame, uint8_t function, uint8_
 
   return (status == 0);
 }
+#else
+bool BasenBmsBle::send_command_(uint8_t start_of_frame, uint8_t function, uint8_t value) { return false; }
+#endif  // USE_ESP32
 
 std::string BasenBmsBle::charging_states_bits_to_string_(const uint8_t mask) {
-  std::string values = "";
+  std::string values;
   if (mask) {
     for (int i = 0; i < CHARGING_STATES_SIZE; i++) {
       if (mask & (1 << i)) {
@@ -721,7 +729,7 @@ std::string BasenBmsBle::charging_states_bits_to_string_(const uint8_t mask) {
 }
 
 std::string BasenBmsBle::discharging_states_bits_to_string_(const uint8_t mask) {
-  std::string values = "";
+  std::string values;
   if (mask) {
     for (int i = 0; i < DISCHARGING_STATES_SIZE; i++) {
       if (mask & (1 << i)) {
@@ -737,7 +745,7 @@ std::string BasenBmsBle::discharging_states_bits_to_string_(const uint8_t mask) 
 }
 
 std::string BasenBmsBle::charging_warnings_bits_to_string_(const uint8_t mask) {
-  std::string values = "";
+  std::string values;
   if (mask) {
     for (int i = 0; i < CHARGING_WARNINGS_SIZE; i++) {
       if (mask & (1 << i)) {
@@ -753,7 +761,7 @@ std::string BasenBmsBle::charging_warnings_bits_to_string_(const uint8_t mask) {
 }
 
 std::string BasenBmsBle::discharging_warnings_bits_to_string_(const uint8_t mask) {
-  std::string values = "";
+  std::string values;
   if (mask) {
     for (int i = 0; i < DISCHARGING_WARNINGS_SIZE; i++) {
       if (mask & (1 << i)) {
