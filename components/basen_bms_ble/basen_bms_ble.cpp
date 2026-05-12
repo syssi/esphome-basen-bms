@@ -288,7 +288,7 @@ void BasenBmsBle::decode_status_data_(const std::vector<uint8_t> &data) {
     return (uint32_t(basen_get_16bit(i + 2)) << 16) | (uint32_t(basen_get_16bit(i + 0)) << 0);
   };
 
-  ESP_LOGI(TAG, "Status frame (%d+4 bytes):", data.size());
+  ESP_LOGI(TAG, "Status frame (%zu+4 bytes):", data.size());
   ESP_LOGD(TAG, "  %s", format_hex_pretty(&data.front(), data.size()).c_str());  // NOLINT
 
   // Byte Len Payload              Description                      Unit  Precision
@@ -360,7 +360,7 @@ void BasenBmsBle::decode_general_info_data_(const std::vector<uint8_t> &data) {
     return (uint32_t(basen_get_16bit(i + 2)) << 16) | (uint32_t(basen_get_16bit(i + 0)) << 0);
   };
 
-  ESP_LOGI(TAG, "General info frame (%d+4 bytes):", data.size());
+  ESP_LOGI(TAG, "General info frame (%zu+4 bytes):", data.size());
   ESP_LOGD(TAG, "  %s", format_hex_pretty(&data.front(), data.size()).c_str());  // NOLINT
 
   // Byte Len Payload              Description                      Unit  Precision
@@ -415,7 +415,7 @@ void BasenBmsBle::decode_cell_voltages_data_(const std::vector<uint8_t> &data) {
   uint8_t offset = 12 * (data[2] - 36);
   uint8_t cells = data[3] / 2;
 
-  ESP_LOGI(TAG, "Cell voltages frame (chunk %d, %d+4 bytes):", data[2] - 36, data.size());
+  ESP_LOGI(TAG, "Cell voltages frame (chunk %d, %zu+4 bytes):", data[2] - 36, data.size());
   ESP_LOGD(TAG, "  %s", format_hex_pretty(&data.front(), data.size()).c_str());  // NOLINT
 
   // Byte Len Payload              Description                      Unit  Precision
@@ -476,7 +476,7 @@ void BasenBmsBle::decode_cell_voltages_data_(const std::vector<uint8_t> &data) {
 }
 
 void BasenBmsBle::decode_balancing_data_(const std::vector<uint8_t> &data) {
-  ESP_LOGI(TAG, "Balancing frame (%d+4 bytes):", data.size());
+  ESP_LOGI(TAG, "Balancing frame (%zu+4 bytes):", data.size());
   ESP_LOGI(TAG, "  %s", format_hex_pretty(&data.front(), data.size()).c_str());  // NOLINT
 
   // Byte Len Payload              Description                      Unit  Precision
@@ -537,7 +537,7 @@ void BasenBmsBle::decode_balancing_data_(const std::vector<uint8_t> &data) {
 }
 
 void BasenBmsBle::decode_protect_ic_data_(const std::vector<uint8_t> &data) {
-  ESP_LOGI(TAG, "Protect IC frame (%d+4 bytes):", data.size());
+  ESP_LOGI(TAG, "Protect IC frame (%zu+4 bytes):", data.size());
   ESP_LOGI(TAG, "  %s", format_hex_pretty(&data.front(), data.size()).c_str());  // NOLINT
 
   // Byte Len Payload              Description                      Unit  Precision
