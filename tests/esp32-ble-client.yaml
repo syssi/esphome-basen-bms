@@ -1,7 +1,6 @@
 substitutions:
   name: basen-bms-ble
   device_description: "Establish a BLE client connection"
-  mac_address: A4:C1:38:27:48:9A
 
 esphome:
   name: ${name}
@@ -40,7 +39,7 @@ api:
 esp32_ble_tracker:
 
 ble_client:
-  - mac_address: ${mac_address}
+  - mac_address: !secret bms0_mac_address
     id: client0
 
 switch:
