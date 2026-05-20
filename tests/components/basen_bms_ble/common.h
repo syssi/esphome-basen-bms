@@ -8,7 +8,7 @@ class TestableBasenBmsBle : public BasenBmsBle {
  public:
   void update() override {}
   bool send_command_(uint8_t start_of_frame, uint8_t function, uint8_t value = 0x00) { return false; }
-  bool write_register(uint16_t reg, uint8_t value) {
+  bool write_register(uint16_t reg, uint8_t value) override {
     last_write_reg = reg;
     last_write_value = value;
     return true;
