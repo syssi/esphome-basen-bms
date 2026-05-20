@@ -128,7 +128,8 @@ class BasenBmsBle :
     balancing_cells_text_sensor_ = balancing_cells_text_sensor;
   }
 
-  void write_register(uint8_t address, uint16_t value);
+  virtual bool write_register(uint16_t reg, uint8_t value);
+  bool change_mosfet_status(uint16_t reg, uint8_t bit, bool state);
   void on_basen_bms_ble_data(const std::vector<uint8_t> &data);
 
  protected:
@@ -182,6 +183,7 @@ class BasenBmsBle :
   uint16_t char_notify_handle_{0};
   uint16_t char_command_handle_{0};
   uint8_t next_command_{5};
+  uint8_t mosfet_status_{0xFF};
 
   float min_cell_voltage_{100.0f};
   float max_cell_voltage_{-100.0f};
@@ -200,13 +202,15 @@ class BasenBmsBle :
   void publish_state_(sensor::Sensor *sensor, float value);
   void publish_state_(text_sensor::TextSensor *text_sensor, const std::string &state);
   void publish_state_(switch_::Switch *obj, const bool &state);
+  std::vector<uint8_t> build_frame_(uint8_t start_of_frame, uint8_t function, const uint8_t *data,
+                                    uint8_t data_len) const;
   bool send_command_(uint8_t start_of_frame, uint8_t function, uint8_t value = 0x00);
   std::string charging_states_bits_to_string_(uint8_t mask);
   std::string discharging_states_bits_to_string_(uint8_t mask);
   std::string charging_warnings_bits_to_string_(uint8_t mask);
   std::string discharging_warnings_bits_to_string_(uint8_t mask);
 
-  uint16_t chksum_(const uint8_t data[], const uint16_t len) {
+  uint16_t chksum_(const uint8_t data[], const uint16_t len) const {
     uint16_t checksum = 0x00;
     for (uint16_t i = 0; i < len; i++) {
       checksum = checksum + data[i];
