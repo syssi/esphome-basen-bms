@@ -227,6 +227,180 @@ TEST(BasenBmsBleBaleancingTest, BalancingCells) {
   EXPECT_EQ(cells.state, "8, 16");
 }
 
+// ── Online status tracker ─────────────────────────────────────────────────────
+
+TEST(BasenBmsBleOnlineStatusTrackerTest, ReachesThreshold) {
+  TestableBasenBmsBle bms;
+  binary_sensor::BinarySensor online_status;
+  bms.set_online_status_binary_sensor(&online_status);
+
+  for (int i = 0; i < 10; i++)
+    bms.track_online_status_();
+
+  EXPECT_FALSE(online_status.state);
+}
+
+TEST(BasenBmsBleOnlineStatusTrackerTest, DoesNotRepeatAfterThreshold) {
+  TestableBasenBmsBle bms;
+  binary_sensor::BinarySensor online_status;
+  bms.set_online_status_binary_sensor(&online_status);
+
+  for (int i = 0; i < 10; i++)
+    bms.track_online_status_();
+  EXPECT_EQ(bms.get_no_response_count(), 11);
+
+  bms.track_online_status_();
+  EXPECT_EQ(bms.get_no_response_count(), 11);
+}
+
+TEST(BasenBmsBleOnlineStatusTrackerTest, ResetRestoresOnlineStatus) {
+  TestableBasenBmsBle bms;
+  binary_sensor::BinarySensor online_status;
+  bms.set_online_status_binary_sensor(&online_status);
+
+  for (int i = 0; i < 10; i++)
+    bms.track_online_status_();
+  EXPECT_FALSE(online_status.state);
+
+  bms.reset_online_status_tracker_();
+  EXPECT_TRUE(online_status.state);
+  EXPECT_EQ(bms.get_no_response_count(), 0);
+}
+
+TEST(BasenBmsBleOnlineStatusTrackerTest, CanRetriggerAfterReset) {
+  TestableBasenBmsBle bms;
+  binary_sensor::BinarySensor online_status;
+  bms.set_online_status_binary_sensor(&online_status);
+
+  for (int i = 0; i < 10; i++)
+    bms.track_online_status_();
+  bms.reset_online_status_tracker_();
+
+  for (int i = 0; i < 10; i++)
+    bms.track_online_status_();
+  EXPECT_FALSE(online_status.state);
+}
+
+TEST(BasenBmsBleOnlineStatusTrackerTest, ValidFrameResetsCounter) {
+  TestableBasenBmsBle bms;
+
+  for (int i = 0; i < 5; i++)
+    bms.track_online_status_();
+  EXPECT_EQ(bms.get_no_response_count(), 5);
+
+  bms.on_basen_bms_ble_data(STATUS_FRAME);
+  EXPECT_EQ(bms.get_no_response_count(), 0);
+}
+
+TEST(BasenBmsBleOnlineStatusTrackerTest, NotYetAtThresholdStaysOnline) {
+  TestableBasenBmsBle bms;
+  binary_sensor::BinarySensor online_status;
+  bms.set_online_status_binary_sensor(&online_status);
+
+  online_status.publish_state(true);
+  for (int i = 0; i < 9; i++)
+    bms.track_online_status_();
+
+  EXPECT_TRUE(online_status.state);
+}
+
+// ── publish_device_unavailable_ ───────────────────────────────────────────────
+
+TEST(BasenBmsBlePublishDeviceUnavailableTest, SetsOnlineStatusFalse) {
+  TestableBasenBmsBle bms;
+  binary_sensor::BinarySensor online_status;
+  bms.set_online_status_binary_sensor(&online_status);
+
+  online_status.publish_state(true);
+  bms.publish_device_unavailable_();
+
+  EXPECT_FALSE(online_status.state);
+}
+
+TEST(BasenBmsBlePublishDeviceUnavailableTest, SetsNumericSensorsToNAN) {
+  TestableBasenBmsBle bms;
+  sensor::Sensor total_voltage, current, power, charging_power, discharging_power;
+  sensor::Sensor capacity_remaining, state_of_charge, nominal_capacity, nominal_voltage;
+  sensor::Sensor real_capacity, charging_cycles;
+  bms.set_total_voltage_sensor(&total_voltage);
+  bms.set_current_sensor(&current);
+  bms.set_power_sensor(&power);
+  bms.set_charging_power_sensor(&charging_power);
+  bms.set_discharging_power_sensor(&discharging_power);
+  bms.set_capacity_remaining_sensor(&capacity_remaining);
+  bms.set_state_of_charge_sensor(&state_of_charge);
+  bms.set_nominal_capacity_sensor(&nominal_capacity);
+  bms.set_nominal_voltage_sensor(&nominal_voltage);
+  bms.set_real_capacity_sensor(&real_capacity);
+  bms.set_charging_cycles_sensor(&charging_cycles);
+
+  bms.publish_device_unavailable_();
+
+  EXPECT_TRUE(std::isnan(total_voltage.state));
+  EXPECT_TRUE(std::isnan(current.state));
+  EXPECT_TRUE(std::isnan(power.state));
+  EXPECT_TRUE(std::isnan(charging_power.state));
+  EXPECT_TRUE(std::isnan(discharging_power.state));
+  EXPECT_TRUE(std::isnan(capacity_remaining.state));
+  EXPECT_TRUE(std::isnan(state_of_charge.state));
+  EXPECT_TRUE(std::isnan(nominal_capacity.state));
+  EXPECT_TRUE(std::isnan(nominal_voltage.state));
+  EXPECT_TRUE(std::isnan(real_capacity.state));
+  EXPECT_TRUE(std::isnan(charging_cycles.state));
+}
+
+TEST(BasenBmsBlePublishDeviceUnavailableTest, SetsCellAndTempSensorsToNAN) {
+  TestableBasenBmsBle bms;
+  sensor::Sensor cell0, cell1, temp0, temp1;
+  bms.set_cell_voltage_sensor(0, &cell0);
+  bms.set_cell_voltage_sensor(1, &cell1);
+  bms.set_temperature_sensor(0, &temp0);
+  bms.set_temperature_sensor(1, &temp1);
+
+  bms.publish_device_unavailable_();
+
+  EXPECT_TRUE(std::isnan(cell0.state));
+  EXPECT_TRUE(std::isnan(cell1.state));
+  EXPECT_TRUE(std::isnan(temp0.state));
+  EXPECT_TRUE(std::isnan(temp1.state));
+}
+
+TEST(BasenBmsBlePublishDeviceUnavailableTest, SetsDynamicTextSensorsToOffline) {
+  TestableBasenBmsBle bms;
+  text_sensor::TextSensor charging_states, discharging_states, charging_warnings;
+  text_sensor::TextSensor discharging_warnings, balancing_cells;
+  bms.set_charging_states_text_sensor(&charging_states);
+  bms.set_discharging_states_text_sensor(&discharging_states);
+  bms.set_charging_warnings_text_sensor(&charging_warnings);
+  bms.set_discharging_warnings_text_sensor(&discharging_warnings);
+  bms.set_balancing_cells_text_sensor(&balancing_cells);
+
+  bms.publish_device_unavailable_();
+
+  EXPECT_EQ(charging_states.state, "Offline");
+  EXPECT_EQ(discharging_states.state, "Offline");
+  EXPECT_EQ(charging_warnings.state, "Offline");
+  EXPECT_EQ(discharging_warnings.state, "Offline");
+  EXPECT_EQ(balancing_cells.state, "Offline");
+}
+
+TEST(BasenBmsBlePublishDeviceUnavailableTest, LeavesStaticTextSensorsUnchanged) {
+  TestableBasenBmsBle bms;
+  text_sensor::TextSensor manufacturing_date;
+  manufacturing_date.publish_state("2021.11.17");
+  bms.set_manufacturing_date_text_sensor(&manufacturing_date);
+
+  bms.publish_device_unavailable_();
+
+  EXPECT_EQ(manufacturing_date.state, "2021.11.17");
+}
+
+TEST(BasenBmsBlePublishDeviceUnavailableTest, NullSensorsDoNotCrash) {
+  TestableBasenBmsBle bms;
+
+  EXPECT_NO_FATAL_FAILURE(bms.publish_device_unavailable_());
+}
+
 // ── Null sensors do not crash ─────────────────────────────────────────────────
 
 TEST(BasenBmsBleSafetyTest, NullSensorsDoNotCrash) {

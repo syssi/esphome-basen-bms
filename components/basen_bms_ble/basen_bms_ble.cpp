@@ -12,6 +12,7 @@
 namespace esphome::basen_bms_ble {
 
 static const char *const TAG = "basen_bms_ble";
+static const uint8_t MAX_NO_RESPONSE_COUNT = 10;
 
 static const uint16_t BASEN_BMS_SERVICE_UUID = 0xFA00;
 static const uint16_t BASEN_BMS_NOTIFY_CHARACTERISTIC_UUID = 0xFA01;   // handle 0x12
@@ -104,8 +105,6 @@ void BasenBmsBle::gattc_event_handler(esp_gattc_cb_event_t event, esp_gatt_if_t 
     }
     case ESP_GATTC_DISCONNECT_EVT: {
       this->node_state = espbt::ClientState::IDLE;
-
-      // this->publish_state_(this->voltage_sensor_, NAN);
 
       if (this->char_notify_handle_ != 0) {
         auto status = esp_ble_gattc_unregister_for_notify(this->parent()->get_gattc_if(),
@@ -232,6 +231,7 @@ void BasenBmsBle::assemble_(const uint8_t *data, uint16_t length) {
 }
 
 void BasenBmsBle::update() {
+  this->track_online_status_();
   if (this->node_state != espbt::ClientState::ESTABLISHED) {
     ESP_LOGW(TAG, "[%s] Not connected", ADDR_STR(this->parent_->address_str()));
     return;
@@ -252,6 +252,7 @@ void BasenBmsBle::update() {}
 #endif  // USE_ESP32
 
 void BasenBmsBle::on_basen_bms_ble_data(const std::vector<uint8_t> &data) {
+  this->reset_online_status_tracker_();
   uint8_t frame_type = data[2];
 
   switch (frame_type) {
@@ -580,6 +581,7 @@ void BasenBmsBle::decode_protect_ic_data_(const std::vector<uint8_t> &data) {
 void BasenBmsBle::dump_config() {  // NOLINT(google-readability-function-size,readability-function-size)
   ESP_LOGCONFIG(TAG, "BasenBmsBle:");
 
+  LOG_BINARY_SENSOR("", "Online Status", this->online_status_binary_sensor_);
   LOG_BINARY_SENSOR("", "Balancing", this->balancing_binary_sensor_);
   LOG_BINARY_SENSOR("", "Charging", this->charging_binary_sensor_);
   LOG_BINARY_SENSOR("", "Discharging", this->discharging_binary_sensor_);
@@ -652,6 +654,56 @@ void BasenBmsBle::dump_config() {  // NOLINT(google-readability-function-size,re
   LOG_TEXT_SENSOR("", "Discharging warnings", this->discharging_warnings_text_sensor_);
   LOG_TEXT_SENSOR("", "Manufacturing Date", this->manufacturing_date_text_sensor_);
   LOG_TEXT_SENSOR("", "Balancing cells", this->balancing_cells_text_sensor_);
+}
+
+void BasenBmsBle::track_online_status_() {
+  if (this->no_response_count_ < MAX_NO_RESPONSE_COUNT)
+    this->no_response_count_++;
+  if (this->no_response_count_ == MAX_NO_RESPONSE_COUNT) {
+    this->publish_device_unavailable_();
+    this->no_response_count_++;
+  }
+}
+
+void BasenBmsBle::reset_online_status_tracker_() {
+  this->no_response_count_ = 0;
+  this->publish_state_(this->online_status_binary_sensor_, true);
+}
+
+void BasenBmsBle::publish_device_unavailable_() {
+  this->publish_state_(this->online_status_binary_sensor_, false);
+  this->publish_state_(this->total_voltage_sensor_, NAN);
+  this->publish_state_(this->current_sensor_, NAN);
+  this->publish_state_(this->power_sensor_, NAN);
+  this->publish_state_(this->charging_power_sensor_, NAN);
+  this->publish_state_(this->discharging_power_sensor_, NAN);
+  this->publish_state_(this->capacity_remaining_sensor_, NAN);
+  this->publish_state_(this->charging_states_bitmask_sensor_, NAN);
+  this->publish_state_(this->discharging_states_bitmask_sensor_, NAN);
+  this->publish_state_(this->charging_warnings_bitmask_sensor_, NAN);
+  this->publish_state_(this->discharging_warnings_bitmask_sensor_, NAN);
+  this->publish_state_(this->balancing_cells_bitmask_sensor_, NAN);
+  this->publish_state_(this->state_of_charge_sensor_, NAN);
+  this->publish_state_(this->nominal_capacity_sensor_, NAN);
+  this->publish_state_(this->nominal_voltage_sensor_, NAN);
+  this->publish_state_(this->real_capacity_sensor_, NAN);
+  this->publish_state_(this->serial_number_sensor_, NAN);
+  this->publish_state_(this->charging_cycles_sensor_, NAN);
+  this->publish_state_(this->min_cell_voltage_sensor_, NAN);
+  this->publish_state_(this->max_cell_voltage_sensor_, NAN);
+  this->publish_state_(this->min_voltage_cell_sensor_, NAN);
+  this->publish_state_(this->max_voltage_cell_sensor_, NAN);
+  this->publish_state_(this->delta_cell_voltage_sensor_, NAN);
+  this->publish_state_(this->average_cell_voltage_sensor_, NAN);
+  for (auto &cell : this->cells_)
+    this->publish_state_(cell.cell_voltage_sensor_, NAN);
+  for (auto &temp : this->temperatures_)
+    this->publish_state_(temp.temperature_sensor_, NAN);
+  this->publish_state_(this->charging_states_text_sensor_, "Offline");
+  this->publish_state_(this->discharging_states_text_sensor_, "Offline");
+  this->publish_state_(this->charging_warnings_text_sensor_, "Offline");
+  this->publish_state_(this->discharging_warnings_text_sensor_, "Offline");
+  this->publish_state_(this->balancing_cells_text_sensor_, "Offline");
 }
 
 void BasenBmsBle::publish_state_(binary_sensor::BinarySensor *binary_sensor, const bool &state) {

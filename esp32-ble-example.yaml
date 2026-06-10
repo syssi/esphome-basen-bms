@@ -59,6 +59,8 @@ basen_bms_ble:
 
 binary_sensor:
   - platform: basen_bms_ble
+    online_status:
+      name: "online status"
     balancing:
       name: "balancing"
     charging:

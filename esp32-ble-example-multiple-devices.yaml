@@ -73,6 +73,9 @@ basen_bms_ble:
 binary_sensor:
   - platform: basen_bms_ble
     basen_bms_ble_id: bms0
+    online_status:
+      name: "online status"
+      device_id: device0
     balancing:
       name: "balancing"
       device_id: device0
@@ -85,6 +88,9 @@ binary_sensor:
 
   - platform: basen_bms_ble
     basen_bms_ble_id: bms1
+    online_status:
+      name: "online status"
+      device_id: device1
     balancing:
       name: "balancing"
       device_id: device1
