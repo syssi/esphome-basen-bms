@@ -29,6 +29,9 @@ class BasenBmsBle :
   void update() override;
   float get_setup_priority() const override { return setup_priority::DATA; }
 
+  void set_online_status_binary_sensor(binary_sensor::BinarySensor *online_status_binary_sensor) {
+    online_status_binary_sensor_ = online_status_binary_sensor;
+  }
   void set_balancing_binary_sensor(binary_sensor::BinarySensor *balancing_binary_sensor) {
     balancing_binary_sensor_ = balancing_binary_sensor;
   }
@@ -133,6 +136,7 @@ class BasenBmsBle :
   void on_basen_bms_ble_data(const std::vector<uint8_t> &data);
 
  protected:
+  binary_sensor::BinarySensor *online_status_binary_sensor_{nullptr};
   binary_sensor::BinarySensor *balancing_binary_sensor_{nullptr};
   binary_sensor::BinarySensor *charging_binary_sensor_{nullptr};
   binary_sensor::BinarySensor *discharging_binary_sensor_{nullptr};
@@ -182,6 +186,7 @@ class BasenBmsBle :
   std::vector<uint8_t> frame_buffer_;
   uint16_t char_notify_handle_{0};
   uint16_t char_command_handle_{0};
+  uint8_t no_response_count_{0};
   uint8_t next_command_{5};
   uint8_t mosfet_status_{0xFF};
 
@@ -192,6 +197,9 @@ class BasenBmsBle :
   uint8_t max_voltage_cell_{0};
   uint8_t min_voltage_cell_{0};
 
+  void publish_device_unavailable_();
+  void reset_online_status_tracker_();
+  void track_online_status_();
   void assemble_(const uint8_t *data, uint16_t length);
   void decode_status_data_(const std::vector<uint8_t> &data);
   void decode_general_info_data_(const std::vector<uint8_t> &data);

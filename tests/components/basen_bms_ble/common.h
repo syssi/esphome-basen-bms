@@ -16,6 +16,10 @@ class TestableBasenBmsBle : public BasenBmsBle {
   void set_mosfet_status(uint8_t status) { this->mosfet_status_ = status; }
   uint8_t get_mosfet_status() const { return this->mosfet_status_; }
   using BasenBmsBle::build_frame_;
+  using BasenBmsBle::track_online_status_;
+  using BasenBmsBle::reset_online_status_tracker_;
+  using BasenBmsBle::publish_device_unavailable_;
+  uint8_t get_no_response_count() const { return no_response_count_; }
   uint16_t last_write_reg{0};
   uint8_t last_write_value{0};
 };
