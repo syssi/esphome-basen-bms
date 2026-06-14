@@ -192,6 +192,9 @@ void BasenBmsBle::gattc_event_handler(esp_gattc_cb_event_t event, esp_gatt_if_t 
 }
 
 void BasenBmsBle::assemble_(const uint8_t *data, uint16_t length) {
+  if (data == nullptr || length == 0)
+    return;
+
   if (this->frame_buffer_.size() > MAX_RESPONSE_SIZE) {
     ESP_LOGW(TAG, "Maximum response size exceeded");
     this->frame_buffer_.clear();
@@ -206,6 +209,12 @@ void BasenBmsBle::assemble_(const uint8_t *data, uint16_t length) {
 
   if (this->frame_buffer_.back() == BASEN_PKT_END_2) {
     const uint8_t *raw = &this->frame_buffer_[0];
+
+    if (this->frame_buffer_.size() < 8) {
+      ESP_LOGW(TAG, "Frame too short (%zu bytes), discarding", this->frame_buffer_.size());
+      this->frame_buffer_.clear();
+      return;
+    }
 
     uint16_t data_len = raw[3];
     uint16_t frame_len = 4 + data_len + 4;
