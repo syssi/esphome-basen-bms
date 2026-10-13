@@ -24,6 +24,11 @@ from esphome.const import (
 
 from . import BASEN_BMS_BLE_COMPONENT_SCHEMA, CONF_BASEN_BMS_BLE_ID
 
+try:
+    from esphome.components.const import CONF_SERIAL_NUMBER
+except ImportError:  # ESPHome < 2026.11.0
+    CONF_SERIAL_NUMBER = "serial_number"
+
 DEPENDENCIES = ["basen_bms_ble"]
 
 CODEOWNERS = ["@syssi"]
@@ -43,7 +48,6 @@ CONF_STATE_OF_CHARGE = "state_of_charge"
 CONF_NOMINAL_CAPACITY = "nominal_capacity"
 CONF_NOMINAL_VOLTAGE = "nominal_voltage"
 CONF_REAL_CAPACITY = "real_capacity"
-CONF_SERIAL_NUMBER = "serial_number"
 CONF_CHARGING_CYCLES = "charging_cycles"
 CONF_MIN_CELL_VOLTAGE = "min_cell_voltage"
 CONF_MAX_CELL_VOLTAGE = "max_cell_voltage"
