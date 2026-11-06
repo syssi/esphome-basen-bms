@@ -207,6 +207,7 @@ class BasenBmsBle :
   void decode_balancing_data_(const std::vector<uint8_t> &data);
   void decode_protect_ic_data_(const std::vector<uint8_t> &data);
   void publish_state_(binary_sensor::BinarySensor *binary_sensor, const bool &state);
+  void invalidate_binary_sensor_(binary_sensor::BinarySensor *binary_sensor);
   void publish_state_(sensor::Sensor *sensor, float value);
   void publish_state_(text_sensor::TextSensor *text_sensor, const std::string &state);
   void publish_state_(switch_::Switch *obj, const bool &state);
