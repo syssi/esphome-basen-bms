@@ -689,6 +689,11 @@ void BasenBmsBle::reset_online_status_tracker_() {
 
 void BasenBmsBle::publish_device_unavailable_() {
   this->publish_state_(this->online_status_binary_sensor_, false);
+
+  this->invalidate_binary_sensor_(this->balancing_binary_sensor_);
+  this->invalidate_binary_sensor_(this->charging_binary_sensor_);
+  this->invalidate_binary_sensor_(this->discharging_binary_sensor_);
+
   this->publish_state_(this->total_voltage_sensor_, NAN);
   this->publish_state_(this->current_sensor_, NAN);
   this->publish_state_(this->power_sensor_, NAN);
@@ -728,6 +733,13 @@ void BasenBmsBle::publish_state_(binary_sensor::BinarySensor *binary_sensor, con
     return;
 
   binary_sensor->publish_state(state);
+}
+
+void BasenBmsBle::invalidate_binary_sensor_(binary_sensor::BinarySensor *binary_sensor) {
+  if (binary_sensor == nullptr)
+    return;
+
+  binary_sensor->invalidate_state();
 }
 
 void BasenBmsBle::publish_state_(sensor::Sensor *sensor, float value) {
