@@ -3,13 +3,12 @@ from esphome.components import switch
 import esphome.config_validation as cv
 
 from .. import BASEN_BMS_BLE_COMPONENT_SCHEMA, CONF_BASEN_BMS_BLE_ID, basen_bms_ble_ns
-from ..const import CONF_DISCHARGING
+from ..const import CONF_CHARGING, CONF_DISCHARGING
 
 DEPENDENCIES = ["basen_bms_ble"]
 
 CODEOWNERS = ["@syssi"]
 
-CONF_CHARGING = "charging"
 
 ICON_CHARGING = "mdi:battery-charging-50"
 ICON_DISCHARGING = "mdi:battery-charging-50"
