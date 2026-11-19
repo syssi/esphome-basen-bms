@@ -18,7 +18,7 @@ SWITCHES = {
     CONF_DISCHARGING: (0x011D, 1),
 }
 
-BasenSwitch = basen_bms_ble_ns.class_("BasenSwitch", switch.Switch, cg.Component)
+BasenSwitch = basen_bms_ble_ns.class_("BasenSwitch", switch.Switch)
 
 CONFIG_SCHEMA = BASEN_BMS_BLE_COMPONENT_SCHEMA.extend(
     {
@@ -38,7 +38,6 @@ async def to_code(config):
         if key in config:
             conf = config[key]
             var = await switch.new_switch(conf)
-            await cg.register_component(var, conf)
             cg.add(getattr(hub, f"set_{key}_switch")(var))
             cg.add(var.set_parent(hub))
             cg.add(var.set_holding_register(reg))
