@@ -671,6 +671,9 @@ void BasenBmsBle::dump_config() {  // NOLINT(google-readability-function-size,re
   LOG_TEXT_SENSOR("", "Discharging warnings", this->discharging_warnings_text_sensor_);
   LOG_TEXT_SENSOR("", "Manufacturing Date", this->manufacturing_date_text_sensor_);
   LOG_TEXT_SENSOR("", "Balancing cells", this->balancing_cells_text_sensor_);
+
+  LOG_SWITCH("", "Charging", this->charging_switch_);
+  LOG_SWITCH("", "Discharging", this->discharging_switch_);
 }
 
 void BasenBmsBle::track_online_status_() {
